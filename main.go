@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
@@ -14,6 +15,7 @@ import (
 	"github.com/PatrikOlin/skvs"
 	"github.com/ilyakaznacheev/cleanenv"
 	"github.com/urfave/cli/v2"
+	"gopkg.in/yaml.v2"
 )
 
 var store *skvs.KVStore
@@ -26,6 +28,7 @@ type TeamsMessage struct {
 
 type Config struct {
 	Name       string `yaml:"name"`
+	Color      string `yaml:"color"`
 	WebhookURL string `yaml:"webhook_url"`
 }
 
@@ -44,11 +47,27 @@ func initConfig() {
 
 	err := cleanenv.ReadConfig(configFile, &cfg)
 	if err != nil {
-		fmt.Println("failed to read config file, using default values")
-		cfg = Config{
-			Name:       "Burton",
-			WebhookURL: "",
-		}
+		createDefaultConfig(configFile)
+	}
+}
+
+func createDefaultConfig(path string) {
+	fmt.Println("failed to read config file, creating config with default values")
+	cfg = Config{
+		Name:       "Burton",
+		Color:      "#46D9FF",
+		WebhookURL: "",
+	}
+
+	bytes, err := yaml.Marshal(cfg)
+	if err != nil {
+		fmt.Println("failed to marshal default config values")
+	}
+
+	e := ioutil.WriteFile(path, bytes, 0644)
+	if e != nil {
+		fmt.Println("failed to create default config file")
+		panic(e)
 	}
 }
 
@@ -171,7 +190,7 @@ func calculateTimeCheckedIn(checkin int64) time.Duration {
 func sendTeamsMessage(title, msg string) error {
 	tBody, _ := json.Marshal(TeamsMessage{
 		Title:      title,
-		ThemeColor: "#ba7016",
+		ThemeColor: cfg.Color,
 		Text:       msg,
 	})
 
