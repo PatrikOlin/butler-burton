@@ -17,24 +17,45 @@ func init() {
 }
 
 func main() {
+	var verbose bool
+	var catered bool
+
 	app := &cli.App{
 		Name:  "Butler Burton",
 		Usage: "Your personal butler",
+		Flags: []cli.Flag{
+			&cli.BoolFlag{
+				Name:        "verbose",
+				Aliases:     []string{"v"},
+				Value:       false,
+				Usage:       "Turn on verbose mode",
+				Destination: &verbose,
+			},
+		},
 		Commands: []*cli.Command{
 			{
 				Name:    "check in",
 				Aliases: []string{"ci"},
 				Usage:   "trigger check in sequence",
 				Action: func(c *cli.Context) error {
-					return cmd.Checkin()
+					return cmd.Checkin(verbose)
 				},
 			},
 			{
 				Name:    "check out",
 				Aliases: []string{"co"},
 				Usage:   "trigger check out sequence",
+				Flags: []cli.Flag{
+					&cli.BoolFlag{
+						Name:        "catered",
+						Aliases:     []string{"c"},
+						Value:       false,
+						Usage:       "Check BL-lunch field in report for todays shift",
+						Destination: &catered,
+					},
+				},
 				Action: func(c *cli.Context) error {
-					return cmd.Checkout()
+					return cmd.Checkout(catered, verbose)
 				},
 			},
 			{
@@ -54,19 +75,19 @@ func main() {
 					{
 						Name:     "set",
 						Aliases:  []string{"s"},
-						Usage:    "set new report name",
+						Usage:    "set new report filename",
 						Category: "report",
 						Action: func(c *cli.Context) error {
-							return cmd.SetReportName(c.Args().First())
+							return cmd.SetReportFilename(c.Args().First())
 						},
 					},
 					{
 						Name:     "get",
 						Aliases:  []string{"g"},
-						Usage:    "get current report name",
+						Usage:    "get current report filename",
 						Category: "report",
 						Action: func(c *cli.Context) error {
-							return cmd.GetReportName()
+							return cmd.GetReportFilename()
 						},
 					},
 				},

@@ -10,7 +10,7 @@ import (
 	"github.com/PatrikOlin/butler-burton/xlsx"
 )
 
-func Checkin() error {
+func Checkin(verbose bool) error {
 	d := (15 * time.Minute)
 	rounded := time.Now().Local().Round(d)
 	checkinUnix := time.Now().Unix()
@@ -26,7 +26,7 @@ func Checkin() error {
 		cfg.Cfg.Color, cfg.Cfg.WebhookURL)
 
 	if cfg.Cfg.Report.Update {
-		xlsx.SetCheckInCellValue(rounded)
+		xlsx.SetCheckInCellValue(rounded, verbose)
 	}
 	return nil
 }

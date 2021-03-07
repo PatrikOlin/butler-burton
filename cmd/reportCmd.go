@@ -8,15 +8,15 @@ import (
 	"github.com/PatrikOlin/skvs"
 )
 
-func SetReportName(name string) error {
-	db.Store.Put("reportName", name)
+func SetReportFilename(name string) error {
+	db.Store.Put("reportFilename", name)
 	fmt.Printf("Gotcha, set %s as report name\n", name)
 	return nil
 }
 
-func GetReportName() error {
+func GetReportFilename() error {
 	var rn string
-	if err := db.Store.Get("reportName", &rn); err == skvs.ErrNotFound {
+	if err := db.Store.Get("reportFilename", &rn); err == skvs.ErrNotFound {
 		fmt.Println("not found")
 		return err
 	} else if err != nil {

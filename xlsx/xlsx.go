@@ -2,30 +2,41 @@ package xlsx
 
 import (
 	"fmt"
+	"log"
 	"path"
 	"strconv"
 	"time"
 
 	"github.com/360EntSecGroup-Skylar/excelize/v2"
 	"github.com/PatrikOlin/butler-burton/cfg"
+	"github.com/PatrikOlin/butler-burton/db"
+	"github.com/PatrikOlin/skvs"
 )
 
-func SetCheckInCellValue(ciTime time.Time) {
-	f, err := excelize.OpenFile(getPath())
+func SetCheckInCellValue(ciTime time.Time, verbose bool) {
+	path, err := getPath()
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 
-	cellCoords := getCellCoords(cfg.Cfg.Report.CheckinCol)
+	f, err := excelize.OpenFile(path)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	cellCoords := cfg.Cfg.Report.CheckinCol + getRowNumber()
 	i := f.GetActiveSheetIndex()
 	sheet := f.GetSheetName(i)
 	if err != nil {
 		fmt.Println(err)
 	}
 
-	fmt.Printf("Writing %s to cell %s in %s\n", ciTime, cellCoords, getPath())
-	f.SetCellValue(sheet, cellCoords, ciTime.Format("15:04"))
+	f.SetCellValue(sheet, cellCoords, fixTime(ciTime))
+	if verbose == true {
+		fmt.Printf("Writing %s to cell %s in %s\n", ciTime.Format("15:04"), cellCoords, path)
+	}
 
 	err = f.Save()
 	if err != nil {
@@ -34,27 +45,41 @@ func SetCheckInCellValue(ciTime time.Time) {
 	}
 }
 
-func SetCheckOutCellValue(coTime time.Time) {
+func SetCheckOutCellValue(coTime time.Time, blOpt bool, verbose bool) {
 	lunchDuration, err := time.Parse("15:04", "01:00")
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
-	f, err := excelize.OpenFile(getPath())
+	row := getRowNumber()
+	path, err := getPath()
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 
-	cellCoords := getCellCoords(cfg.Cfg.Report.CheckoutCol)
-	lunchCoords := getCellCoords(cfg.Cfg.Report.LunchCol)
+	f, err := excelize.OpenFile(path)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	cellCoords := cfg.Cfg.Report.CheckoutCol + row
+	lunchCoords := cfg.Cfg.Report.LunchCol + row
 	i := f.GetActiveSheetIndex()
 	sheet := f.GetSheetName(i)
 
-	fmt.Printf("Writing %s to cell %s in %s\n", coTime.Format("15:04"), cellCoords, getPath())
-	f.SetCellValue(sheet, cellCoords, coTime.Format("15:04"))
-	fmt.Printf("Writing %s to cell %s in %s\n", lunchDuration.Format("15:04"), lunchCoords, getPath())
-	f.SetCellValue(sheet, lunchCoords, lunchDuration.Format("15:04"))
+	f.SetCellValue(sheet, cellCoords, fixTime(coTime))
+	f.SetCellValue(sheet, lunchCoords, time.Duration(1*time.Hour))
+
+	if verbose == true {
+		fmt.Printf("Writing %s to cell %s in %s\n", coTime.Format("15:04"), cellCoords, path)
+		fmt.Printf("Writing %s to cell %s in %s\n", lunchDuration.Format("15:04"), lunchCoords, path)
+	}
+
+	if blOpt == true {
+		setCateredLunch(f, sheet, row, verbose)
+	}
 
 	err = f.Save()
 	if err != nil {
@@ -63,7 +88,22 @@ func SetCheckOutCellValue(coTime time.Time) {
 	}
 }
 
-func getCellCoords(col string) string {
+func setCateredLunch(f *excelize.File, sheet string, row string, verbose bool) {
+	blLunchCoords := cfg.Cfg.Report.BLLunchCol + row
+	str := "BL"
+	path, err := getPath()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	f.SetCellFormula(sheet, blLunchCoords, "")
+	f.SetCellValue(sheet, blLunchCoords, str)
+	if verbose == true {
+		fmt.Printf("Writing %s to cell %s in %s\n", str, blLunchCoords, path)
+	}
+}
+
+func getRowNumber() string {
 	offset := cfg.Cfg.Report.StartingRow
 	t := time.Now().Local()
 	currDay := t.Day()
@@ -78,9 +118,24 @@ func getCellCoords(col string) string {
 	t2 := time.Now().Local()
 	daysSinceStart = int(t2.Sub(t1).Hours() / 24)
 
-	return col + strconv.Itoa(daysSinceStart+offset)
+	return strconv.Itoa(daysSinceStart + offset)
 }
 
-func getPath() string {
-	return path.Join(cfg.Cfg.Report.Path, "burtontest.xlsx")
+func getPath() (string, error) {
+	var rn string
+	if err := db.Store.Get("reportFilename", &rn); err == skvs.ErrNotFound {
+		log.Fatal("not found")
+		return "", err
+	} else if err != nil {
+		log.Fatal(err)
+		return "", err
+	} else {
+		return path.Join(cfg.Cfg.Report.Path, rn), nil
+	}
+}
+
+func fixTime(t time.Time) time.Time {
+	// workaround för konstig tidhantering av excelize, se https://github.com/360EntSecGroup-Skylar/excelize/issues/409
+	t, _ = time.ParseInLocation("2006-01-02 15:04", t.Format("2006-01-02 15:04"), time.UTC)
+	return t
 }

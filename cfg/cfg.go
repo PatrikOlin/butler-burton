@@ -26,6 +26,7 @@ type Report struct {
 	CheckinCol         string `yaml:"checkin_col"`
 	CheckoutCol        string `yaml:"checkout_col"`
 	LunchCol           string `yaml:"lunch_col"`
+	BLLunchCol         string `yaml:"bl_lunch_col"`
 }
 
 var Cfg Config
@@ -56,6 +57,7 @@ func createDefaultConfig(path string) {
 			CheckinCol:         "C",
 			CheckoutCol:        "D",
 			LunchCol:           "F",
+			BLLunchCol:         "I",
 		},
 	}
 

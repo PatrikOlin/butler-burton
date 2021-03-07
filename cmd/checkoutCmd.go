@@ -13,7 +13,7 @@ import (
 	"github.com/PatrikOlin/butler-burton/xlsx"
 )
 
-func Checkout() error {
+func Checkout(blOpt bool, verbose bool) error {
 	var valUnix int64
 	if err := db.Store.Get("checkinUnix", &valUnix); err == skvs.ErrNotFound {
 		fmt.Println("not found")
@@ -45,7 +45,7 @@ func Checkout() error {
 			"Utcheckad från "+string(time.Now().Format("15:04:05")),
 			cfg.Cfg.Color,
 			cfg.Cfg.WebhookURL)
-		xlsx.SetCheckOutCellValue(roundedNow)
+		xlsx.SetCheckOutCellValue(roundedNow, blOpt, verbose)
 	}
 	return nil
 }
