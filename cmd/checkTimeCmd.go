@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	"log"
+	"time"
 
 	"github.com/PatrikOlin/skvs"
 
@@ -18,9 +19,9 @@ func CheckTime() error {
 		log.Fatal(err)
 		return err
 	} else {
+		fmt.Printf("You checked in at %s\n", time.Unix(valUnix, 0).Local().Format("15:04:05"))
 		fmt.Printf("Time checked in %s\n", CalculateTimeCheckedIn(valUnix))
 
 	}
 	return nil
-
 }
