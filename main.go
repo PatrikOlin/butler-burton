@@ -92,6 +92,14 @@ func main() {
 					},
 				},
 			},
+			{
+				Name:    "edit",
+				Aliases: []string{"e"},
+				Usage:   "edit config-file",
+				Action: func(c *cli.Context) error {
+					return cmd.EditConfig()
+				},
+			},
 		},
 	}
 

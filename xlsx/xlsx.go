@@ -14,13 +14,7 @@ import (
 )
 
 func SetCheckInCellValue(ciTime time.Time, verbose bool) {
-	path, err := getPath()
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-
-	f, err := excelize.OpenFile(path)
+	f, err := openFile()
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -52,13 +46,8 @@ func SetCheckOutCellValue(coTime time.Time, blOpt bool, verbose bool) {
 		return
 	}
 	row := getRowNumber()
-	path, err := getPath()
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
 
-	f, err := excelize.OpenFile(path)
+	f, err := openFile()
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -86,6 +75,21 @@ func SetCheckOutCellValue(coTime time.Time, blOpt bool, verbose bool) {
 		fmt.Println(err)
 		return
 	}
+}
+
+func openFile() (*excelize.File, error) {
+	path, err := getPath()
+	if err != nil {
+		return nil, err
+	}
+
+	f, err := excelize.OpenFile(path)
+	if err != nil {
+		fmt.Println(err)
+		return nil, err
+	}
+
+	return f, nil
 }
 
 func setCateredLunch(f *excelize.File, sheet string, row string, verbose bool) {

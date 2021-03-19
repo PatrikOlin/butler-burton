@@ -3,6 +3,7 @@ package cfg
 import (
 	"fmt"
 	"io/ioutil"
+	"log"
 	"os"
 	"path"
 
@@ -32,15 +33,30 @@ type Report struct {
 var Cfg Config
 
 func InitConfig() {
+	fpath := GetConfigPath()
+
+	err := cleanenv.ReadConfig(fpath, &Cfg)
+	if err != nil {
+		createDefaultConfig(fpath)
+	}
+}
+
+func GetConfigPath() string {
 	dir := os.Getenv("HOME") + "/.config/butlerburton/"
 	util.MakeDirectoryIfNotExists(dir)
 
-	configFile := path.Join(dir, "config.yml")
+	fpath := path.Join(dir, "config.yml")
 
-	err := cleanenv.ReadConfig(configFile, &Cfg)
+	return fpath
+}
+
+func ReloadConfig() {
+	fpath := GetConfigPath()
+	err := cleanenv.ReadConfig(fpath, &Cfg)
 	if err != nil {
-		createDefaultConfig(configFile)
+		log.Fatalln("Could not read config file, time to panic!")
 	}
+
 }
 
 func createDefaultConfig(path string) {
