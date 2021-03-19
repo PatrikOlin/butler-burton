@@ -27,9 +27,15 @@ func SetCheckInCellValue(ciTime time.Time, verbose bool) {
 		fmt.Println(err)
 	}
 
+	p, err := getPath()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
 	f.SetCellValue(sheet, cellCoords, fixTime(ciTime))
 	if verbose == true {
-		fmt.Printf("Writing %s to cell %s in %s\n", ciTime.Format("15:04"), cellCoords, path)
+		fmt.Printf("Writing %s to cell %s in %s\n", ciTime.Format("15:04"), cellCoords, p)
 	}
 
 	err = f.Save()
@@ -60,10 +66,15 @@ func SetCheckOutCellValue(coTime time.Time, blOpt bool, verbose bool) {
 
 	f.SetCellValue(sheet, cellCoords, fixTime(coTime))
 	f.SetCellValue(sheet, lunchCoords, time.Duration(1*time.Hour))
+	p, err := getPath()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
 
 	if verbose == true {
-		fmt.Printf("Writing %s to cell %s in %s\n", coTime.Format("15:04"), cellCoords, path)
-		fmt.Printf("Writing %s to cell %s in %s\n", lunchDuration.Format("15:04"), lunchCoords, path)
+		fmt.Printf("Writing %s to cell %s in %s\n", coTime.Format("15:04"), cellCoords, p)
+		fmt.Printf("Writing %s to cell %s in %s\n", lunchDuration.Format("15:04"), lunchCoords, p)
 	}
 
 	if blOpt == true {
@@ -78,12 +89,12 @@ func SetCheckOutCellValue(coTime time.Time, blOpt bool, verbose bool) {
 }
 
 func openFile() (*excelize.File, error) {
-	path, err := getPath()
+	p, err := getPath()
 	if err != nil {
 		return nil, err
 	}
 
-	f, err := excelize.OpenFile(path)
+	f, err := excelize.OpenFile(p)
 	if err != nil {
 		fmt.Println(err)
 		return nil, err
@@ -95,7 +106,7 @@ func openFile() (*excelize.File, error) {
 func setCateredLunch(f *excelize.File, sheet string, row string, verbose bool) {
 	blLunchCoords := cfg.Cfg.Report.BLLunchCol + row
 	str := "BL"
-	path, err := getPath()
+	p, err := getPath()
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -103,7 +114,7 @@ func setCateredLunch(f *excelize.File, sheet string, row string, verbose bool) {
 	f.SetCellFormula(sheet, blLunchCoords, "")
 	f.SetCellValue(sheet, blLunchCoords, str)
 	if verbose == true {
-		fmt.Printf("Writing %s to cell %s in %s\n", str, blLunchCoords, path)
+		fmt.Printf("Writing %s to cell %s in %s\n", str, blLunchCoords, p)
 	}
 }
 

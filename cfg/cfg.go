@@ -13,10 +13,11 @@ import (
 )
 
 type Config struct {
-	Name       string `yaml:"name"`
-	Color      string `yaml:"color"`
-	WebhookURL string `yaml:"webhook_url"`
-	Report     Report `yaml:"report"`
+	Name         string `yaml:"name"`
+	Color        string `yaml:"color"`
+	WebhookURL   string `yaml:"webhook_url"`
+	Notifcations bool   `yaml:"notifications"`
+	Report       Report `yaml:"report"`
 }
 
 type Report struct {
@@ -62,9 +63,10 @@ func ReloadConfig() {
 func createDefaultConfig(path string) {
 	fmt.Println("failed to read config file, creating config with default values")
 	Cfg = Config{
-		Name:       "Burton",
-		Color:      "#46D9FF",
-		WebhookURL: "",
+		Name:         "Burton",
+		Color:        "#46D9FF",
+		WebhookURL:   "",
+		Notifcations: true,
 		Report: Report{
 			Path:               "/home/olin/.butlerburton/",
 			Update:             false,

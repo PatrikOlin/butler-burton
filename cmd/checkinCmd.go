@@ -19,7 +19,8 @@ func Checkin(verbose bool) error {
 
 	de := time.Unix(checkinUnix, 0).Local().Format("15:04:05")
 	dr := rounded.Format("15:04:05")
-	fmt.Printf("Ok, checked in at %s (%s)\n", de, dr)
+	checkinMsg := fmt.Sprintf("Ok, checked in at %s (%s)\n", de, dr)
+	fmt.Println(checkinMsg)
 	util.SendTeamsMessage(
 		fmt.Sprintf("%s checkar in", cfg.Cfg.Name),
 		"Incheckad från "+string(de),
@@ -27,6 +28,10 @@ func Checkin(verbose bool) error {
 
 	if cfg.Cfg.Report.Update {
 		xlsx.SetCheckInCellValue(rounded, verbose)
+	}
+
+	if cfg.Cfg.Notifcations {
+		util.Notify("Checking in \n", checkinMsg)
 	}
 	return nil
 }

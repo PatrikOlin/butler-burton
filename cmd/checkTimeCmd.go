@@ -7,7 +7,9 @@ import (
 
 	"github.com/PatrikOlin/skvs"
 
+	"github.com/PatrikOlin/butler-burton/cfg"
 	"github.com/PatrikOlin/butler-burton/db"
+	"github.com/PatrikOlin/butler-burton/util"
 )
 
 func CheckTime() error {
@@ -19,9 +21,15 @@ func CheckTime() error {
 		log.Fatal(err)
 		return err
 	} else {
-		fmt.Printf("You checked in at %s\n", time.Unix(valUnix, 0).Local().Format("15:04:05"))
-		fmt.Printf("Time checked in %s\n", CalculateTimeCheckedIn(valUnix))
+		checkInTimeMsg := fmt.Sprintf("You checked in at %s\n", time.Unix(valUnix, 0).Local().Format("15:04:05"))
+		timeCheckedInMsg := fmt.Sprintf("Time checked in %s\n", CalculateTimeCheckedIn(valUnix))
+		fmt.Printf(checkInTimeMsg)
+		fmt.Printf(timeCheckedInMsg)
 
+		if cfg.Cfg.Notifcations {
+			n := fmt.Sprintf("%s%s \n", checkInTimeMsg, timeCheckedInMsg)
+			util.Notify("Checked in duration \n", n)
+		}
 	}
 	return nil
 }
