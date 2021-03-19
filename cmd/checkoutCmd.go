@@ -31,7 +31,8 @@ func Checkout(blOpt bool, verbose bool) error {
 		return err
 	} else {
 		fmt.Println("Ok, checking out.")
-		fmt.Printf("Time spent checked in: %s\n", CalculateTimeCheckedIn(valUnix))
+		checkedInMsg := fmt.Sprintf("Time spent checked in: %s\n", CalculateTimeCheckedIn(valUnix))
+		fmt.Println(checkedInMsg)
 
 		de := time.Unix(valUnix, 0).Local().Format("15:04:05")
 		dr := valRound.Local().Format("15:04:05")
@@ -39,13 +40,23 @@ func Checkout(blOpt bool, verbose bool) error {
 		d := (15 * time.Minute)
 		roundedNow := time.Now().Local().Round(d)
 
-		fmt.Printf("You checked in at: %s (%s)\n", de, dr)
+		checkedInDurMsg := fmt.Sprintf("You checked in at: %s (%s)\n", de, dr)
+		fmt.Println(checkedInDurMsg)
 		util.SendTeamsMessage(
 			fmt.Sprintf("%s checkar ut", cfg.Cfg.Name),
 			"Utcheckad från "+string(time.Now().Format("15:04:05")),
 			cfg.Cfg.Color,
 			cfg.Cfg.WebhookURL)
-		xlsx.SetCheckOutCellValue(roundedNow, blOpt, verbose)
+
+		if cfg.Cfg.Report.Update {
+			xlsx.SetCheckOutCellValue(roundedNow, blOpt, verbose)
+		}
+
+		if cfg.Cfg.Notifcations {
+			n := fmt.Sprintf("%s%s \n", checkedInMsg, checkedInDurMsg)
+			util.Notify("Checking out \n", n)
+		}
+
 	}
 	return nil
 }
