@@ -19,11 +19,12 @@ func init() {
 func main() {
 	var verbose bool
 	var catered bool
+	var overtime bool
 
 	app := &cli.App{
 		Name:    "Butler Burton",
 		Usage:   "Your personal butler",
-		Version: "v1.2.1",
+		Version: "v1.3.0",
 		Flags: []cli.Flag{
 			&cli.BoolFlag{
 				Name:        "verbose",
@@ -53,9 +54,16 @@ func main() {
 						Usage:       "Check BL-lunch field in report for todays shift",
 						Destination: &catered,
 					},
+					&cli.BoolFlag{
+						Name:        "overtime",
+						Aliases:     []string{"o"},
+						Value:       false,
+						Usage:       "Write overtime to overtime column",
+						Destination: &overtime,
+					},
 				},
 				Action: func(c *cli.Context) error {
-					return cmd.Checkout(catered, verbose)
+					return cmd.Checkout(catered, overtime, verbose)
 				},
 			},
 			{
