@@ -28,7 +28,7 @@ func main() {
 	app := &cli.App{
 		Name:    "Butler Burton",
 		Usage:   "Your personal butler",
-		Version: "v1.3.0",
+		Version: "v1.4.0",
 		Flags: []cli.Flag{
 			&cli.BoolFlag{
 				Name:        "verbose",
