@@ -11,10 +11,11 @@ or download binary and run it
 Edit config-file in `$HOME/.config/butlerburton`
 
 Example-config:
+
 ```ỳaml
 name: "Butler Burton"
-color: "#46D9FF" 
-webhook_url: "<Teams webhook url>" 
+color: "#46D9FF"
+webhook_url: "<Teams webhook url>"
 notifications: true
 vab_msg: "Jag vabbar idag, försök hålla skutan flytande så är jag tillbaks imorgon"
 report:
@@ -27,6 +28,5 @@ report:
     lunch_col: "F"
     bl_lunch_col: "I"
     overtime_col: "R"
-    flex_in_col: "V"
     vab_col: "L"
 ```
