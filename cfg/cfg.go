@@ -30,6 +30,7 @@ type Report struct {
 	LunchCol           string `yaml:"lunch_col"`
 	BLLunchCol         string `yaml:"bl_lunch_col"`
 	OvertimeCol        string `yaml:"overtime_col"`
+	FlexInCol          string `yaml:"flex_in_col"`
 }
 
 var Cfg Config
@@ -78,6 +79,7 @@ func createDefaultConfig(path string) {
 			LunchCol:           "F",
 			BLLunchCol:         "I",
 			OvertimeCol:        "R",
+			FlexInCol:          "V",
 		},
 	}
 

@@ -30,8 +30,9 @@ func Checkout(blOpt, overtime, verbose bool) error {
 		log.Fatal(err)
 		return err
 	} else {
+		tci := CalculateTimeCheckedIn(valUnix)
 		fmt.Println("Ok, checking out.")
-		checkedInMsg := fmt.Sprintf("Time spent checked in: %s\n", CalculateTimeCheckedIn(valUnix))
+		checkedInMsg := fmt.Sprintf("Time spent checked in: %s\n", tci)
 		fmt.Println(checkedInMsg)
 
 		de := time.Unix(valUnix, 0).Local().Format("15:04:05")
@@ -48,8 +49,16 @@ func Checkout(blOpt, overtime, verbose bool) error {
 			cfg.Cfg.Color,
 			cfg.Cfg.WebhookURL)
 
-		if cfg.Cfg.Report.Update {
-			xlsx.SetCheckOutCellValue(roundedNow, blOpt, verbose)
+		var ot string
+
+		if cfg.Cfg.Report.Update && overtime {
+			ot = calculateOvertime(tci)
+		}
+
+		if cfg.Cfg.Report.Update && ot != "" {
+			xlsx.SetCheckOutCellValue(roundedNow, ot, blOpt, verbose)
+		} else if cfg.Cfg.Report.Update {
+			xlsx.SetCheckOutCellValue(roundedNow, "", blOpt, verbose)
 		}
 
 		if cfg.Cfg.Notifcations {
@@ -68,4 +77,14 @@ func CalculateTimeCheckedIn(checkin int64) time.Duration {
 	d := (1000 * time.Millisecond)
 	trunc := t2.Truncate(d)
 	return trunc
+}
+
+func calculateOvertime(tci time.Duration) string {
+	ot := tci - (9 * time.Hour)
+	r := (15 * time.Minute)
+	ot = ot.Round(r)
+	hh := ot / time.Hour
+	ot -= hh * time.Hour
+	mm := ot / time.Minute
+	return fmt.Sprintf("%02d:%02d", hh, mm)
 }

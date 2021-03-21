@@ -45,7 +45,7 @@ func SetCheckInCellValue(ciTime time.Time, verbose bool) {
 	}
 }
 
-func SetCheckOutCellValue(coTime time.Time, blOpt, overtime, verbose bool) {
+func SetCheckOutCellValue(coTime time.Time, ot string, catering, verbose bool) {
 	lunchDuration, err := time.Parse("15:04", "01:00")
 	if err != nil {
 		fmt.Println(err)
@@ -77,8 +77,12 @@ func SetCheckOutCellValue(coTime time.Time, blOpt, overtime, verbose bool) {
 		fmt.Printf("Writing %s to cell %s in %s\n", lunchDuration.Format("15:04"), lunchCoords, p)
 	}
 
-	if blOpt == true {
+	if catering == true {
 		setCateredLunch(f, sheet, row, verbose)
+	}
+
+	if ot != "" {
+		setOvertime(ot, f, sheet, row, verbose)
 	}
 
 	err = f.Save()
@@ -103,7 +107,7 @@ func openFile() (*excelize.File, error) {
 	return f, nil
 }
 
-func setCateredLunch(f *excelize.File, sheet string, row string, verbose bool) {
+func setCateredLunch(f *excelize.File, sheet, row string, verbose bool) {
 	blLunchCoords := cfg.Cfg.Report.BLLunchCol + row
 	str := "BL"
 	p, err := getPath()
@@ -116,6 +120,25 @@ func setCateredLunch(f *excelize.File, sheet string, row string, verbose bool) {
 	if verbose == true {
 		fmt.Printf("Writing %s to cell %s in %s\n", str, blLunchCoords, p)
 	}
+}
+
+func setOvertime(ot string, f *excelize.File, sheet, row string, verbose bool) {
+	overtimeCoords := cfg.Cfg.Report.OvertimeCol + row
+
+	p, err := getPath()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	err = f.SetCellValue(sheet, overtimeCoords, ot)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	if verbose == true {
+		fmt.Printf("Writing %s to cell %s in %s\n", ot, overtimeCoords, p)
+	}
+
 }
 
 func getRowNumber() string {
