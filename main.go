@@ -63,7 +63,7 @@ func main() {
 					},
 				},
 				Action: func(c *cli.Context) error {
-					return cmd.Checkout(catered, verbose)
+					return cmd.Checkout(catered, overtime, verbose)
 				},
 			},
 			{

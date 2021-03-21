@@ -39,7 +39,7 @@ func SetCheckInCellValue(ciTime time.Time, verbose bool) {
 	}
 }
 
-func SetCheckOutCellValue(coTime time.Time, blOpt bool, verbose bool) {
+func SetCheckOutCellValue(coTime time.Time, blOpt, overtime, verbose bool) {
 	lunchDuration, err := time.Parse("15:04", "01:00")
 	if err != nil {
 		fmt.Println(err)
