@@ -19,6 +19,7 @@ func init() {
 func main() {
 	var verbose bool
 	var catered bool
+	var overtime bool
 
 	app := &cli.App{
 		Name:    "Butler Burton",
@@ -52,6 +53,13 @@ func main() {
 						Value:       false,
 						Usage:       "Check BL-lunch field in report for todays shift",
 						Destination: &catered,
+					},
+					&cli.BoolFlag{
+						Name:        "overtime",
+						Aliases:     []string{"o"},
+						Value:       false,
+						Usage:       "Write overtime to overtime column",
+						Destination: &overtime,
 					},
 				},
 				Action: func(c *cli.Context) error {
