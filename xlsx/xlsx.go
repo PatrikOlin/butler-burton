@@ -45,6 +45,27 @@ func SetCheckInCellValue(ciTime time.Time, verbose bool) {
 	}
 }
 
+func SetVabCheckin() {
+	row := getRowNumber()
+	vabCoords := cfg.Cfg.Report.VabCol + row
+
+	f, err := openFile()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	i := f.GetActiveSheetIndex()
+	sheet := f.GetSheetName(i)
+
+	f.SetCellValue(sheet, vabCoords, "08:00")
+
+	err = f.Save()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+}
+
 func SetCheckOutCellValue(coTime time.Time, ot string, catering, verbose bool) {
 	lunchDuration, err := time.Parse("15:04", "01:00")
 	if err != nil {

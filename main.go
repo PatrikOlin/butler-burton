@@ -52,7 +52,11 @@ func main() {
 					},
 				},
 				Action: func(c *cli.Context) error {
-					return cmd.Checkin(opts)
+					if opts.Vab {
+						return cmd.VabCheckin()
+					} else {
+						return cmd.Checkin(opts)
+					}
 				},
 			},
 			{

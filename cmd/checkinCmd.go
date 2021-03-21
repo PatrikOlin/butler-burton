@@ -35,3 +35,22 @@ func Checkin(opts util.Options) error {
 	}
 	return nil
 }
+
+func VabCheckin() error {
+	util.SendTeamsMessage(
+		fmt.Sprintf("%s vabbar", cfg.Cfg.Name),
+		cfg.Cfg.VabMsg,
+		cfg.Cfg.Color,
+		cfg.Cfg.WebhookURL,
+	)
+
+	if cfg.Cfg.Report.Update {
+		xlsx.SetVabCheckin()
+	}
+
+	if cfg.Cfg.Notifcations {
+		util.Notify("Reporting vab \n", "")
+	}
+
+	return nil
+}
