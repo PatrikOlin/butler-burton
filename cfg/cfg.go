@@ -17,6 +17,7 @@ type Config struct {
 	Color        string `yaml:"color"`
 	WebhookURL   string `yaml:"webhook_url"`
 	Notifcations bool   `yaml:"notifications"`
+	VabMsg       string `yaml:"vab_msg"`
 	Report       Report `yaml:"report"`
 }
 
@@ -31,6 +32,7 @@ type Report struct {
 	BLLunchCol         string `yaml:"bl_lunch_col"`
 	OvertimeCol        string `yaml:"overtime_col"`
 	FlexInCol          string `yaml:"flex_in_col"`
+	VabCol             string `yaml:"vab_col"`
 }
 
 var Cfg Config
@@ -69,6 +71,7 @@ func createDefaultConfig(path string) {
 		Color:        "#46D9FF",
 		WebhookURL:   "",
 		Notifcations: true,
+		VabMsg:       "Jag vabbar idag, försök hålla skutan flytande så är jag tillbaka imorgon",
 		Report: Report{
 			Path:               "/home/olin/.butlerburton/",
 			Update:             false,
@@ -80,6 +83,7 @@ func createDefaultConfig(path string) {
 			BLLunchCol:         "I",
 			OvertimeCol:        "R",
 			FlexInCol:          "V",
+			VabCol:             "L",
 		},
 	}
 

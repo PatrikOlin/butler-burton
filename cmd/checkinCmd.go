@@ -10,7 +10,7 @@ import (
 	"github.com/PatrikOlin/butler-burton/xlsx"
 )
 
-func Checkin(verbose bool) error {
+func Checkin(opts util.Options) error {
 	d := (15 * time.Minute)
 	rounded := time.Now().Local().Round(d)
 	checkinUnix := time.Now().Unix()
@@ -27,11 +27,30 @@ func Checkin(verbose bool) error {
 		cfg.Cfg.Color, cfg.Cfg.WebhookURL)
 
 	if cfg.Cfg.Report.Update {
-		xlsx.SetCheckInCellValue(rounded, verbose)
+		xlsx.SetCheckInCellValue(rounded, opts.Verbose)
 	}
 
 	if cfg.Cfg.Notifcations {
 		util.Notify("Checking in \n", checkinMsg)
 	}
+	return nil
+}
+
+func VabCheckin() error {
+	util.SendTeamsMessage(
+		fmt.Sprintf("%s vabbar", cfg.Cfg.Name),
+		cfg.Cfg.VabMsg,
+		cfg.Cfg.Color,
+		cfg.Cfg.WebhookURL,
+	)
+
+	if cfg.Cfg.Report.Update {
+		xlsx.SetVabCheckin()
+	}
+
+	if cfg.Cfg.Notifcations {
+		util.Notify("Reporting vab \n", "")
+	}
+
 	return nil
 }

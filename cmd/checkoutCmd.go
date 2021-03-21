@@ -13,7 +13,7 @@ import (
 	"github.com/PatrikOlin/butler-burton/xlsx"
 )
 
-func Checkout(blOpt, overtime, verbose bool) error {
+func Checkout(opts util.Options) error {
 	var valUnix int64
 	if err := db.Store.Get("checkinUnix", &valUnix); err == skvs.ErrNotFound {
 		fmt.Println("not found")
@@ -51,14 +51,14 @@ func Checkout(blOpt, overtime, verbose bool) error {
 
 		var ot string
 
-		if cfg.Cfg.Report.Update && overtime {
+		if cfg.Cfg.Report.Update && opts.Overtime {
 			ot = calculateOvertime(tci)
 		}
 
 		if cfg.Cfg.Report.Update && ot != "" {
-			xlsx.SetCheckOutCellValue(roundedNow, ot, blOpt, verbose)
+			xlsx.SetCheckOutCellValue(roundedNow, ot, opts.Catered, opts.Verbose)
 		} else if cfg.Cfg.Report.Update {
-			xlsx.SetCheckOutCellValue(roundedNow, "", blOpt, verbose)
+			xlsx.SetCheckOutCellValue(roundedNow, "", opts.Catered, opts.Verbose)
 		}
 
 		if cfg.Cfg.Notifcations {

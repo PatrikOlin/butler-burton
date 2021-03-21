@@ -9,6 +9,7 @@ import (
 	"github.com/PatrikOlin/butler-burton/cfg"
 	"github.com/PatrikOlin/butler-burton/cmd"
 	"github.com/PatrikOlin/butler-burton/db"
+	"github.com/PatrikOlin/butler-burton/util"
 )
 
 func init() {
@@ -17,9 +18,12 @@ func init() {
 }
 
 func main() {
-	var verbose bool
-	var catered bool
-	var overtime bool
+	opts := util.Options{
+		Verbose:  false,
+		Catered:  false,
+		Overtime: false,
+		Vab:      false,
+	}
 
 	app := &cli.App{
 		Name:    "Butler Burton",
@@ -30,7 +34,7 @@ func main() {
 				Name:        "verbose",
 				Value:       false,
 				Usage:       "Turn on verbose mode",
-				Destination: &verbose,
+				Destination: &opts.Verbose,
 			},
 		},
 		Commands: []*cli.Command{
@@ -38,8 +42,21 @@ func main() {
 				Name:    "check in",
 				Aliases: []string{"ci"},
 				Usage:   "trigger check in sequence",
+				Flags: []cli.Flag{
+					&cli.BoolFlag{
+						Name:        "vab",
+						Aliases:     []string{"v"},
+						Value:       false,
+						Usage:       "Check in as absent as result of vab",
+						Destination: &opts.Vab,
+					},
+				},
 				Action: func(c *cli.Context) error {
-					return cmd.Checkin(verbose)
+					if opts.Vab {
+						return cmd.VabCheckin()
+					} else {
+						return cmd.Checkin(opts)
+					}
 				},
 			},
 			{
@@ -52,18 +69,18 @@ func main() {
 						Aliases:     []string{"c"},
 						Value:       false,
 						Usage:       "Check BL-lunch field in report for todays shift",
-						Destination: &catered,
+						Destination: &opts.Catered,
 					},
 					&cli.BoolFlag{
 						Name:        "overtime",
 						Aliases:     []string{"o"},
 						Value:       false,
 						Usage:       "Write overtime to overtime column",
-						Destination: &overtime,
+						Destination: &opts.Overtime,
 					},
 				},
 				Action: func(c *cli.Context) error {
-					return cmd.Checkout(catered, overtime, verbose)
+					return cmd.Checkout(opts)
 				},
 			},
 			{
