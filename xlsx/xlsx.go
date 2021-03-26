@@ -33,7 +33,8 @@ func SetCheckInCellValue(ciTime time.Time, verbose bool) {
 		return
 	}
 
-	f.SetCellValue(sheet, cellCoords, fixTime(ciTime))
+	f.SetCellValue(sheet, cellCoords, ciTime.Format("15:04"))
+
 	if verbose == true {
 		fmt.Printf("Writing %s to cell %s in %s\n", ciTime.Format("15:04"), cellCoords, p)
 	}
@@ -85,7 +86,7 @@ func SetCheckOutCellValue(coTime time.Time, ot string, catering, verbose bool) {
 	i := f.GetActiveSheetIndex()
 	sheet := f.GetSheetName(i)
 
-	f.SetCellValue(sheet, cellCoords, fixTime(coTime))
+	f.SetCellValue(sheet, cellCoords, coTime.Format("15:04"))
 	f.SetCellValue(sheet, lunchCoords, time.Duration(1*time.Hour))
 	p, err := getPath()
 	if err != nil {
@@ -130,7 +131,7 @@ func openFile() (*excelize.File, error) {
 
 func setCateredLunch(f *excelize.File, sheet, row string, verbose bool) {
 	blLunchCoords := cfg.Cfg.Report.BLLunchCol + row
-	str := "BL"
+	str := "1"
 	p, err := getPath()
 	if err != nil {
 		fmt.Println(err)
@@ -191,10 +192,4 @@ func getPath() (string, error) {
 	} else {
 		return path.Join(cfg.Cfg.Report.Path, rn), nil
 	}
-}
-
-func fixTime(t time.Time) time.Time {
-	// workaround för konstig tidhantering av excelize, se https://github.com/360EntSecGroup-Skylar/excelize/issues/409
-	t, _ = time.ParseInLocation("2006-01-02 15:04", t.Format("2006-01-02 15:04"), time.UTC)
-	return t
 }
