@@ -12,6 +12,8 @@ import (
 	"github.com/PatrikOlin/butler-burton/util"
 )
 
+var Version string
+
 func init() {
 	db.InitDB()
 	cfg.InitConfig()
@@ -28,7 +30,7 @@ func main() {
 	app := &cli.App{
 		Name:    "Butler Burton",
 		Usage:   "Your personal butler",
-		Version: "v1.4.2",
+		Version: Version,
 		Flags: []cli.Flag{
 			&cli.BoolFlag{
 				Name:        "verbose",
