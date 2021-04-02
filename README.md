@@ -2,7 +2,7 @@
 
 > git clone https://github.com/PatrikOlin/butler-burton <br>
 > cd butler-burton <br>
-> go install
+> make install
 
 or download binary and run it
 
