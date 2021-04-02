@@ -1,6 +1,6 @@
 VERSION := $(shell git describe --tags)
 BUILD := $(shell git rev-parse --short HEAD)
-PROJECTNAME := $("butler-burton")
+PROJECTNAME := $(shell basename "$(PWD)")
 
 # Go related variables.
 GOFILES := $(wildcard *.go)
@@ -20,7 +20,7 @@ install:
 
 ## build: build binary, runs 'go build' internally
 build:
-	go build $(LDFLAGS) -o $(PROJECTNAME) 
+	go build $(LDFLAGS)
 
 .PHONY: help
 all: help
