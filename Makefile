@@ -20,7 +20,7 @@ install:
 
 ## build: build binary, runs 'go build' internally
 build:
-	go build $(LDFLAGS)
+	go build $(LDFLAGS) -o $(PROJECTNAME) 
 
 .PHONY: help
 all: help
