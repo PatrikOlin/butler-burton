@@ -1,6 +1,6 @@
 VERSION := $(shell git describe --tags)
 BUILD := $(shell git rev-parse --short HEAD)
-PROJECTNAME := $(shell basename "$(PWD)")
+PROJECTNAME := $("butler-burton")
 
 # Go related variables.
 GOFILES := $(wildcard *.go)
