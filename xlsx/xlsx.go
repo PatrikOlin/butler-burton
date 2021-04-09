@@ -20,12 +20,9 @@ func SetCheckInCellValue(ciTime time.Time, verbose bool) {
 		return
 	}
 
-	cellCoords := cfg.Cfg.Report.CheckinCol + getRowNumber()
 	i := f.GetActiveSheetIndex()
 	sheet := f.GetSheetName(i)
-	if err != nil {
-		fmt.Println(err)
-	}
+	cellCoords := cfg.Cfg.Report.CheckinCol + getRowNumber(f, sheet)
 
 	p, err := getPath()
 	if err != nil {
@@ -47,9 +44,6 @@ func SetCheckInCellValue(ciTime time.Time, verbose bool) {
 }
 
 func SetVabCheckin() {
-	row := getRowNumber()
-	vabCoords := cfg.Cfg.Report.VabCol + row
-
 	f, err := openFile()
 	if err != nil {
 		fmt.Println(err)
@@ -57,6 +51,9 @@ func SetVabCheckin() {
 	}
 	i := f.GetActiveSheetIndex()
 	sheet := f.GetSheetName(i)
+
+	row := getRowNumber(f, sheet)
+	vabCoords := cfg.Cfg.Report.VabCol + row
 
 	f.SetCellValue(sheet, vabCoords, "08:00")
 
@@ -73,7 +70,6 @@ func SetCheckOutCellValue(coTime time.Time, ot string, catering, verbose bool) {
 		fmt.Println(err)
 		return
 	}
-	row := getRowNumber()
 
 	f, err := openFile()
 	if err != nil {
@@ -81,10 +77,12 @@ func SetCheckOutCellValue(coTime time.Time, ot string, catering, verbose bool) {
 		return
 	}
 
-	cellCoords := cfg.Cfg.Report.CheckoutCol + row
-	lunchCoords := cfg.Cfg.Report.LunchCol + row
 	i := f.GetActiveSheetIndex()
 	sheet := f.GetSheetName(i)
+
+	row := getRowNumber(f, sheet)
+	cellCoords := cfg.Cfg.Report.CheckoutCol + row
+	lunchCoords := cfg.Cfg.Report.LunchCol + row
 
 	f.SetCellValue(sheet, cellCoords, coTime.Format("15:04"))
 	f.SetCellValue(sheet, lunchCoords, time.Duration(1*time.Hour))
@@ -163,22 +161,26 @@ func setOvertime(ot string, f *excelize.File, sheet, row string, verbose bool) {
 
 }
 
-func getRowNumber() string {
-	offset := cfg.Cfg.Report.StartingRow
-	t := time.Now().Local()
-	currDay := t.Day()
-	var daysSinceStart int
-
-	var t1 time.Time
-	if currDay < 15 {
-		t1 = time.Now().Local().AddDate(0, -1, (cfg.Cfg.Report.StartingDayOfMonth - currDay))
-	} else {
-		t1 = time.Now().Local().AddDate(0, 0, (cfg.Cfg.Report.StartingDayOfMonth - currDay))
+func getRowNumber(f *excelize.File, sheet string) string {
+	var rowNum string
+	t1 := time.Now()
+	rows, err := f.GetRows(sheet)
+	if err != nil {
+		fmt.Println(err)
 	}
-	t2 := time.Now().Local()
-	daysSinceStart = int(t2.Sub(t1).Hours() / 24)
 
-	return strconv.Itoa(daysSinceStart + offset)
+	for i, _ := range rows {
+		coord := "A" + strconv.Itoa(i)
+		val, _ := f.GetCellValue(sheet, coord)
+		t2, _ := time.Parse("01-02-06", val)
+		t2 = t2.AddDate(0, 0, 1)
+		if t1.Month() == t2.Month() && t1.Day() == t2.Day() {
+			rowNum = strconv.Itoa(i)
+			break
+		}
+	}
+
+	return rowNum
 }
 
 func getPath() (string, error) {
