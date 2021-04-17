@@ -83,8 +83,12 @@ func calculateOvertime(tci time.Duration) string {
 	ot := tci - (9 * time.Hour)
 	r := (15 * time.Minute)
 	ot = ot.Round(r)
-	hh := ot / time.Hour
-	ot -= hh * time.Hour
-	mm := ot / time.Minute
-	return fmt.Sprintf("%02d:%02d", hh, mm)
+	if ot > 0 {
+		hh := ot / time.Hour
+		ot -= hh * time.Hour
+		mm := ot / time.Minute
+		return fmt.Sprintf("%02d:%02d", hh, mm)
+	}
+
+	return ""
 }
