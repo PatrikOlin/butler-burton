@@ -12,7 +12,7 @@ import (
 	"github.com/PatrikOlin/butler-burton/util"
 )
 
-var Version string
+var version string
 
 func init() {
 	db.InitDB()
@@ -30,7 +30,7 @@ func main() {
 	app := &cli.App{
 		Name:    "Butler Burton",
 		Usage:   "Your personal butler",
-		Version: Version,
+		Version: version,
 		Flags: []cli.Flag{
 			&cli.BoolFlag{
 				Name:        "verbose",
@@ -56,9 +56,8 @@ func main() {
 				Action: func(c *cli.Context) error {
 					if opts.Vab {
 						return cmd.VabCheckin()
-					} else {
-						return cmd.Checkin(opts)
 					}
+					return cmd.Checkin(opts)
 				},
 			},
 			{
