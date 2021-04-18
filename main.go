@@ -21,10 +21,11 @@ func init() {
 
 func main() {
 	opts := util.Options{
-		Verbose:  false,
-		Catered:  false,
-		Overtime: false,
-		Vab:      false,
+		Verbose:    false,
+		Catered:    false,
+		Overtime:   false,
+		Vab:        false,
+		ShowStatus: false,
 	}
 
 	app := &cli.App{
@@ -124,6 +125,14 @@ func main() {
 				Usage:   "edit config-file",
 				Action: func(c *cli.Context) error {
 					return cmd.EditConfig()
+				},
+			},
+			{
+				Name:    "afk",
+				Aliases: []string{"a"},
+				Usage:   "set afk status",
+				Action: func(c *cli.Context) error {
+					return cmd.ToggleAFK(c.Args().Get(0), opts)
 				},
 			},
 		},

@@ -24,3 +24,16 @@ func InitDB() {
 		log.Fatal(err)
 	}
 }
+
+func GetCheckinTime() (int64, error) {
+	var valUnix int64
+	if err := Store.Get("checkinUnix", &valUnix); err == skvs.ErrNotFound {
+		log.Println("not found")
+		return -1, err
+	} else if err != nil {
+		log.Fatal(err)
+		return -1, err
+	}
+
+	return valUnix, nil
+}

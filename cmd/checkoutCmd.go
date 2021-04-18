@@ -74,6 +74,15 @@ func CalculateTimeCheckedIn(checkin int64) time.Duration {
 	t1 := time.Unix(checkin, 0)
 	t2 := time.Since(t1)
 
+	var AFKDur time.Duration
+	if err := db.Store.Get("AFKDuration", &AFKDur); err == skvs.ErrNotFound {
+		AFKDur = 0
+	} else if err != nil {
+		log.Fatal(err)
+	} else {
+		t2 -= AFKDur
+	}
+
 	d := (1000 * time.Millisecond)
 	trunc := t2.Truncate(d)
 	return trunc

@@ -65,12 +65,6 @@ func SetVabCheckin() {
 }
 
 func SetCheckOutCellValue(coTime time.Time, ot string, catering, verbose bool) {
-	lunchDuration, err := time.Parse("15:04", "01:00")
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-
 	f, err := openFile()
 	if err != nil {
 		fmt.Println(err)
@@ -94,7 +88,7 @@ func SetCheckOutCellValue(coTime time.Time, ot string, catering, verbose bool) {
 
 	if verbose == true {
 		fmt.Printf("Writing %s to cell %s in %s\n", coTime.Format("15:04"), cellCoords, p)
-		fmt.Printf("Writing %s to cell %s in %s\n", lunchDuration.Format("15:04"), lunchCoords, p)
+		fmt.Printf("Writing %s to cell %s in %s\n", "01:00", lunchCoords, p)
 	}
 
 	if catering == true {
@@ -104,6 +98,28 @@ func SetCheckOutCellValue(coTime time.Time, ot string, catering, verbose bool) {
 	if ot != "" {
 		setOvertime(ot, f, sheet, row, verbose)
 	}
+
+	err = f.Save()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+}
+
+func SetAFKCellValue(AFKDuration string) {
+	f, err := openFile()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	i := f.GetActiveSheetIndex()
+	sheet := f.GetSheetName(i)
+
+	row := getRowNumber(f, sheet)
+	AFKCoords := cfg.Cfg.Report.AFKCol + row
+
+	f.SetCellValue(sheet, AFKCoords, AFKDuration)
 
 	err = f.Save()
 	if err != nil {
