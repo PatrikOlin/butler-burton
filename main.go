@@ -12,7 +12,7 @@ import (
 	"github.com/PatrikOlin/butler-burton/util"
 )
 
-var Version string
+var version string
 
 func init() {
 	db.InitDB()
@@ -21,16 +21,17 @@ func init() {
 
 func main() {
 	opts := util.Options{
-		Verbose:  false,
-		Catered:  false,
-		Overtime: false,
-		Vab:      false,
+		Verbose:    false,
+		Catered:    false,
+		Overtime:   false,
+		Vab:        false,
+		ShowStatus: false,
 	}
 
 	app := &cli.App{
 		Name:    "Butler Burton",
 		Usage:   "Your personal butler",
-		Version: Version,
+		Version: version,
 		Flags: []cli.Flag{
 			&cli.BoolFlag{
 				Name:        "verbose",
@@ -56,9 +57,8 @@ func main() {
 				Action: func(c *cli.Context) error {
 					if opts.Vab {
 						return cmd.VabCheckin()
-					} else {
-						return cmd.Checkin(opts)
 					}
+					return cmd.Checkin(opts)
 				},
 			},
 			{
@@ -125,6 +125,14 @@ func main() {
 				Usage:   "edit config-file",
 				Action: func(c *cli.Context) error {
 					return cmd.EditConfig()
+				},
+			},
+			{
+				Name:    "afk",
+				Aliases: []string{"a"},
+				Usage:   "set afk status",
+				Action: func(c *cli.Context) error {
+					return cmd.ToggleAFK(c.Args().Get(0), opts)
 				},
 			},
 		},

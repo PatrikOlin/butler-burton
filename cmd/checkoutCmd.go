@@ -74,6 +74,15 @@ func CalculateTimeCheckedIn(checkin int64) time.Duration {
 	t1 := time.Unix(checkin, 0)
 	t2 := time.Since(t1)
 
+	var AFKDur time.Duration
+	if err := db.Store.Get("AFKDuration", &AFKDur); err == skvs.ErrNotFound {
+		AFKDur = 0
+	} else if err != nil {
+		log.Fatal(err)
+	} else {
+		t2 -= AFKDur
+	}
+
 	d := (1000 * time.Millisecond)
 	trunc := t2.Truncate(d)
 	return trunc
@@ -83,8 +92,12 @@ func calculateOvertime(tci time.Duration) string {
 	ot := tci - (9 * time.Hour)
 	r := (15 * time.Minute)
 	ot = ot.Round(r)
-	hh := ot / time.Hour
-	ot -= hh * time.Hour
-	mm := ot / time.Minute
-	return fmt.Sprintf("%02d:%02d", hh, mm)
+	if ot > 0 {
+		hh := ot / time.Hour
+		ot -= hh * time.Hour
+		mm := ot / time.Minute
+		return fmt.Sprintf("%02d:%02d", hh, mm)
+	}
+
+	return ""
 }

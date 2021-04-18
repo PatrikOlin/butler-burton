@@ -22,16 +22,15 @@ type Config struct {
 }
 
 type Report struct {
-	Path               string `yaml:"path"`
-	Update             bool   `yaml:"update"`
-	StartingRow        int    `yaml:"starting_row"`
-	StartingDayOfMonth int    `yaml:"starting_day_of_month"`
-	CheckinCol         string `yaml:"checkin_col"`
-	CheckoutCol        string `yaml:"checkout_col"`
-	LunchCol           string `yaml:"lunch_col"`
-	BLLunchCol         string `yaml:"bl_lunch_col"`
-	OvertimeCol        string `yaml:"overtime_col"`
-	VabCol             string `yaml:"vab_col"`
+	Path        string `yaml:"path"`
+	Update      bool   `yaml:"update"`
+	CheckinCol  string `yaml:"checkin_col"`
+	CheckoutCol string `yaml:"checkout_col"`
+	LunchCol    string `yaml:"lunch_col"`
+	BLLunchCol  string `yaml:"bl_lunch_col"`
+	OvertimeCol string `yaml:"overtime_col"`
+	VabCol      string `yaml:"vab_col"`
+	AFKCol      string `yaml:"afk_col"`
 }
 
 var Cfg Config
@@ -72,16 +71,15 @@ func createDefaultConfig(path string) {
 		Notifcations: true,
 		VabMsg:       "Jag vabbar idag, försök hålla skutan flytande så är jag tillbaka imorgon",
 		Report: Report{
-			Path:               "/home/olin/.butlerburton/",
-			Update:             false,
-			StartingRow:        12,
-			StartingDayOfMonth: 16,
-			CheckinCol:         "C",
-			CheckoutCol:        "D",
-			LunchCol:           "F",
-			BLLunchCol:         "I",
-			OvertimeCol:        "R",
-			VabCol:             "L",
+			Path:        "/home/olin/.butlerburton/",
+			Update:      false,
+			CheckinCol:  "C",
+			CheckoutCol: "D",
+			LunchCol:    "F",
+			BLLunchCol:  "I",
+			OvertimeCol: "R",
+			VabCol:      "L",
+			AFKCol:      "G",
 		},
 	}
 
