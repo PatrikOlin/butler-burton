@@ -21,12 +21,11 @@ vab_msg: "Jag vabbar idag, försök hålla skutan flytande så är jag tillbaks 
 report:
     path: "/home/burton/.butlerburton/"
     update: true
-    starting_row: 12
-    starting_day_of_month: 16
     checkin_col: "C"
     checkout_col: "D"
     lunch_col: "F"
     bl_lunch_col: "I"
     overtime_col: "R"
     vab_col: "L"
+    afk_col: "G"
 ```
