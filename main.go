@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"os"
+	"time"
 
 	"github.com/urfave/cli/v2"
 
@@ -12,7 +13,7 @@ import (
 	"github.com/PatrikOlin/butler-burton/util"
 )
 
-var version string
+var Version string
 
 func init() {
 	db.InitDB()
@@ -29,9 +30,16 @@ func main() {
 	}
 
 	app := &cli.App{
-		Name:    "Butler Burton",
-		Usage:   "Your personal butler",
-		Version: version,
+		Name:     "Butler Burton",
+		Usage:    "Your personal butler",
+		Version:  Version,
+		Compiled: time.Now(),
+		Authors: []*cli.Author{
+			&cli.Author{
+				Name:  "Patrik Olin",
+				Email: "patrik@olin.work",
+			},
+		},
 		Flags: []cli.Flag{
 			&cli.BoolFlag{
 				Name:        "verbose",
