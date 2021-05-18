@@ -136,6 +136,14 @@ func main() {
 				},
 			},
 			{
+				Name:    "print",
+				Aliases: []string{"p"},
+				Usage:   "print config-file",
+				Action: func(c *cli.Context) error {
+					return cmd.PrintConfig()
+				},
+			},
+			{
 				Name:    "afk",
 				Aliases: []string{"a"},
 				Usage:   "set afk status",
