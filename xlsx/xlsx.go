@@ -128,6 +128,28 @@ func SetAFKCellValue(AFKDuration string) {
 	}
 }
 
+func SetEmployeeID() {
+	f, err := openFile()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	i := f.GetActiveSheetIndex()
+	sheet := f.GetSheetName(i)
+
+	eID := cfg.Cfg.Report.EmployeeID
+	eIDCoords := cfg.Cfg.Report.EmployeeIDCoords
+
+	f.SetCellValue(sheet, eIDCoords, eID)
+
+	err = f.Save()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+}
+
 func openFile() (*excelize.File, error) {
 	p, err := getPath()
 	if err != nil {

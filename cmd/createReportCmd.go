@@ -5,6 +5,7 @@ import (
 
 	"github.com/PatrikOlin/butler-burton/cfg"
 	"github.com/PatrikOlin/butler-burton/util"
+	"github.com/PatrikOlin/butler-burton/xlsx"
 )
 
 func CreateNewReport() error {
@@ -41,9 +42,13 @@ func CreateNewReport() error {
 	monthFile := monthFileReplacer.Replace(m)
 	name := strings.Replace(cfg.Cfg.Name, " ", "_", -1)
 	reportName := util.DownloadBaseReport(name, monthFolder, monthFile)
+
 	err := SetReportFilename(reportName)
 	if err != nil {
 		return err
 	}
+
+	xlsx.SetEmployeeID()
+
 	return nil
 }

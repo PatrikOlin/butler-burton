@@ -160,14 +160,6 @@ func main() {
 					return cmd.ToggleAFK(c.Args().Get(0), opts)
 				},
 			},
-			{
-				Name:    "auth",
-				Aliases: []string{""},
-				Usage:   "Show auth status",
-				Action: func(c *cli.Context) error {
-					return cmd.Auth()
-				},
-			},
 		},
 	}
 

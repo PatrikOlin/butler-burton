@@ -6,11 +6,10 @@ COPY . /app
 RUN go build -o bb *.go
 
 FROM alpine:3.13.5
+ENV USER="Butler Burton"
 
 WORKDIR /app
 COPY --from=build /app/bb /app 
-COPY --from=build /app/assets/config.yml /root/.config/butlerburton/config.yml
-COPY --from=build /app/assets/report.xlsx /root/.butlerburton/report.xlsx
 
 COPY certs/private.json /root/.config/butlerburton/private.json
 COPY certs/butlerBurtonCert.pfx /root/.config/butlerburton/butlerBurtonCert.pfx

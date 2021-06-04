@@ -1,7 +1,6 @@
 package util
 
 import (
-	"fmt"
 	"log"
 	"os"
 	"time"
@@ -11,28 +10,8 @@ import (
 	"github.com/koltyakov/gosip/api"
 )
 
-func SharepointAuth() *api.SP {
-
-	authCnfg := &strategy.AuthCnfg{}
-	configPath := os.Getenv("HOME") + "/.config/butlerburton/private.json"
-	if err := authCnfg.ReadConfig(configPath); err != nil {
-		log.Fatalf("unable to get config: %v", err)
-	}
-
-	client := &gosip.SPClient{AuthCnfg: authCnfg}
-	sp := api.NewSP(client)
-
-	res, err := sp.Web().Select("Title").Get()
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	fmt.Printf("Site title: %s\n", res.Data().Title)
-	return sp
-}
-
 func DownloadBaseReport(name, monthFolder, monthFile string) string {
-	sp := SharepointAuth()
+	sp := auth()
 	y := time.Now().Format("2006")
 	y2 := time.Now().Format("06")
 	fileRelativeURL := "Tidrapporter/" + y + "/" + monthFolder + "/TIRP_Original_" + monthFile + "-" + y2 + ".xlsx"
@@ -56,5 +35,17 @@ func DownloadBaseReport(name, monthFolder, monthFile string) string {
 
 	file.Sync()
 	return fileName
+}
 
+func auth() *api.SP {
+	authCnfg := &strategy.AuthCnfg{}
+	configPath := os.Getenv("HOME") + "/.config/butlerburton/private.json"
+	if err := authCnfg.ReadConfig(configPath); err != nil {
+		log.Fatalf("unable to get config: %v", err)
+	}
+
+	client := &gosip.SPClient{AuthCnfg: authCnfg}
+	sp := api.NewSP(client)
+
+	return sp
 }

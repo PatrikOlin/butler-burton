@@ -22,15 +22,17 @@ type Config struct {
 }
 
 type Report struct {
-	Path        string `yaml:"path"`
-	Update      bool   `yaml:"update"`
-	CheckinCol  string `yaml:"checkin_col"`
-	CheckoutCol string `yaml:"checkout_col"`
-	LunchCol    string `yaml:"lunch_col"`
-	BLLunchCol  string `yaml:"bl_lunch_col"`
-	OvertimeCol string `yaml:"overtime_col"`
-	VabCol      string `yaml:"vab_col"`
-	AFKCol      string `yaml:"afk_col"`
+	EmployeeID       string `yaml:"employee_id"`
+	Path             string `yaml:"path"`
+	Update           bool   `yaml:"update"`
+	CheckinCol       string `yaml:"checkin_col"`
+	CheckoutCol      string `yaml:"checkout_col"`
+	LunchCol         string `yaml:"lunch_col"`
+	BLLunchCol       string `yaml:"bl_lunch_col"`
+	OvertimeCol      string `yaml:"overtime_col"`
+	VabCol           string `yaml:"vab_col"`
+	AFKCol           string `yaml:"afk_col"`
+	EmployeeIDCoords string `yaml:"employee_id_coords"`
 }
 
 var Cfg Config
@@ -65,21 +67,23 @@ func ReloadConfig() {
 func createDefaultConfig(path string) {
 	fmt.Println("failed to read config file, creating config with default values")
 	Cfg = Config{
-		Name:         "Burton",
+		Name:         os.Getenv("USER"),
 		Color:        "#46D9FF",
 		WebhookURL:   "",
 		Notifcations: true,
 		VabMsg:       "Jag vabbar idag, försök hålla skutan flytande så är jag tillbaka imorgon",
 		Report: Report{
-			Path:        "/home/olin/.butlerburton/",
-			Update:      false,
-			CheckinCol:  "C",
-			CheckoutCol: "D",
-			LunchCol:    "F",
-			BLLunchCol:  "I",
-			OvertimeCol: "R",
-			VabCol:      "L",
-			AFKCol:      "G",
+			EmployeeID:       "0000",
+			Path:             os.Getenv("HOME") + "/.butlerburton/",
+			Update:           false,
+			EmployeeIDCoords: "C2",
+			CheckinCol:       "C",
+			CheckoutCol:      "D",
+			LunchCol:         "F",
+			BLLunchCol:       "I",
+			OvertimeCol:      "R",
+			VabCol:           "L",
+			AFKCol:           "G",
 		},
 	}
 
