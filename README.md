@@ -19,7 +19,9 @@ webhook_url: "<Teams webhook url>"
 notifications: true
 vab_msg: "Jag vabbar idag, försök hålla skutan flytande så är jag tillbaks imorgon"
 report:
+    employee_id: "0000",
     path: "/home/burton/.butlerburton/"
+    employee_id_coords: "C2"
     update: true
     checkin_col: "C"
     checkout_col: "D"
