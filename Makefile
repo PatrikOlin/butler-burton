@@ -1,3 +1,4 @@
+.DEFAULT_GOAL := help
 VERSION := $(shell git describe --tags)
 BUILD := $(shell git rev-parse --short HEAD)
 PROJECTNAME := $(shell basename "$(PWD)")

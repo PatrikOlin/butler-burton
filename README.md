@@ -29,3 +29,21 @@ report:
     vab_col: "L"
     afk_col: "G"
 ```
+
+## Development
+
+### Build docker image
+```sh
+docker build -t "imageName" .
+```
+
+### Start docker container
+```sh
+docker run -it "imageName" sh
+```
+
+### Get report
+```
+docker ps (get containerId)
+docker cp "containerId":/root/.butlerburton/report.xlsx .
+```
