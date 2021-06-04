@@ -108,12 +108,12 @@ func main() {
 				Category: "report",
 				Subcommands: []*cli.Command{
 					{
-						Name:     "set",
-						Aliases:  []string{"s"},
-						Usage:    "set new report filename",
+						Name:     "create",
+						Aliases:  []string{"c"},
+						Usage:    "download original report file and name it according to month and username",
 						Category: "report",
 						Action: func(c *cli.Context) error {
-							return cmd.SetReportFilename(c.Args().First())
+							return cmd.CreateNewReport()
 						},
 					},
 					{
@@ -123,6 +123,15 @@ func main() {
 						Category: "report",
 						Action: func(c *cli.Context) error {
 							return cmd.GetReportFilename()
+						},
+					},
+					{
+						Name:     "set",
+						Aliases:  []string{"s"},
+						Usage:    "set new report filename",
+						Category: "report",
+						Action: func(c *cli.Context) error {
+							return cmd.SetReportFilename(c.Args().First())
 						},
 					},
 				},
@@ -149,6 +158,14 @@ func main() {
 				Usage:   "set afk status",
 				Action: func(c *cli.Context) error {
 					return cmd.ToggleAFK(c.Args().Get(0), opts)
+				},
+			},
+			{
+				Name:    "auth",
+				Aliases: []string{""},
+				Usage:   "Show auth status",
+				Action: func(c *cli.Context) error {
+					return cmd.Auth()
 				},
 			},
 		},
