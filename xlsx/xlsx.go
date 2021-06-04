@@ -79,7 +79,7 @@ func SetCheckOutCellValue(coTime time.Time, ot string, catering, verbose bool) {
 	lunchCoords := cfg.Cfg.Report.LunchCol + row
 
 	f.SetCellValue(sheet, cellCoords, coTime.Format("15:04"))
-	f.SetCellValue(sheet, lunchCoords, time.Duration(1*time.Hour))
+	f.SetCellValue(sheet, lunchCoords, "01:00")
 	p, err := getPath()
 	if err != nil {
 		fmt.Println(err)
