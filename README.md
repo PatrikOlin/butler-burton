@@ -45,5 +45,5 @@ docker run -it "imageName" sh
 ### Get report
 ```
 docker ps (get containerId)
-docker cp "containerId":/root/.butlerburton/report.xlsx .
+docker cp "containerId":/root/.butlerburton/"reportName.xlsx" .
 ```
