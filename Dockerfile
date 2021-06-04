@@ -12,7 +12,9 @@ COPY --from=build /app/bb /app
 COPY --from=build /app/assets/config.yml /root/.config/butlerburton/config.yml
 COPY --from=build /app/assets/report.xlsx /root/.butlerburton/report.xlsx
 
+COPY certs/private.json /root/.config/butlerburton/private.json
+COPY certs/butlerBurtonCert.pfx /root/.config/butlerburton/butlerBurtonCert.pfx
+
 RUN cp bb /usr/local/bin/bb
 
-RUN [ "./bb", "report", "set", "report.xlsx" ]
 CMD [ "/bin/sh" ]
