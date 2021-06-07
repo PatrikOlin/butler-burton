@@ -14,30 +14,26 @@ import (
 )
 
 func DownloadBaseReport(name, monthFolder, monthFile string) string {
-	sp := auth()
 	y := time.Now().Format("2006")
 	y2 := time.Now().Format("06")
 	fileRelativeURL := "Tidrapporter/" + y + "/" + monthFolder + "/TIRP_Original_" + monthFile + "-" + y2 + ".xlsx"
-	data, err := sp.Web().GetFile(fileRelativeURL).Download()
-	if err != nil {
-		log.Fatal(err)
-	}
 
 	fileName := "TIRP_" + name + "_" + monthFile + "-" + y2 + ".xlsx"
-	filePath := os.Getenv("HOME") + "/.butlerburton/" + fileName
-	file, err := os.Create(filePath)
-	if err != nil {
-		log.Fatalf("unable to create a file: %v\n", err)
-	}
-	defer file.Close()
 
-	_, err = file.Write(data)
-	if err != nil {
-		log.Fatalf("unable to write to file: %v\n", err)
-	}
-
-	file.Sync()
+	getFile(fileRelativeURL, fileName)
 	return fileName
+}
+
+func DownloadReport(monthFolder, monthFile, department, name string) error {
+	y := time.Now().Format("2006")
+	y2 := time.Now().Format("06")
+	fileRelativeURL := "Tidrapporter/" + y + "/" + monthFolder + "/" +
+		department + "/TIRP_" + name + "_" + monthFile + "-" + y2 + ".xlsx"
+
+	fileName := "TIRP_" + name + "_" + monthFile + "-" + y2 + ".xlsx"
+
+	getFile(fileRelativeURL, fileName)
+	return nil
 }
 
 func UploadReport(monthFolder, department, filePath string) error {
@@ -60,6 +56,28 @@ func UploadReport(monthFolder, department, filePath string) error {
 	}
 
 	return nil
+}
+
+func getFile(fileRelURL, fileName string) {
+	sp := auth()
+	data, err := sp.Web().GetFile(fileRelURL).Download()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	filePath := os.Getenv("HOME") + "/.butlerburton/" + fileName
+	file, err := os.Create(filePath)
+	if err != nil {
+		log.Fatalf("unable to create a file: %v\n", err)
+	}
+	defer file.Close()
+
+	_, err = file.Write(data)
+	if err != nil {
+		log.Fatalf("unable to write to file: %v\n", err)
+	}
+
+	file.Sync()
 }
 
 func auth() *api.SP {

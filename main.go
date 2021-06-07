@@ -143,6 +143,15 @@ func main() {
 							return cmd.UploadReport()
 						},
 					},
+					{
+						Name:     "download",
+						Aliases:  []string{"d"},
+						Usage:    "download the report file from sharepoint",
+						Category: "report",
+						Action: func(c *cli.Context) error {
+							return cmd.DownloadReport()
+						},
+					},
 				},
 			},
 			{
