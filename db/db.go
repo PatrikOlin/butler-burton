@@ -6,15 +6,13 @@ import (
 	"path"
 
 	"github.com/PatrikOlin/skvs"
-
-	"github.com/PatrikOlin/butler-burton/util"
 )
 
 var Store *skvs.KVStore
 
 func InitDB() {
 	dir := os.Getenv("HOME") + "/.butlerburton/"
-	util.MakeDirectoryIfNotExists(dir)
+	makeDirectoryIfNotExists(dir)
 
 	dbfile := path.Join(dir, "data.db")
 
@@ -36,4 +34,11 @@ func GetCheckinTime() (int64, error) {
 	}
 
 	return valUnix, nil
+}
+
+func makeDirectoryIfNotExists(path string) error {
+	if _, err := os.Stat(path); os.IsNotExist(err) {
+		return os.Mkdir(path, os.ModeDir|0755)
+	}
+	return nil
 }

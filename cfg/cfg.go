@@ -7,7 +7,6 @@ import (
 	"os"
 	"path"
 
-	"github.com/PatrikOlin/butler-burton/util"
 	"github.com/ilyakaznacheev/cleanenv"
 	"gopkg.in/yaml.v2"
 )
@@ -48,7 +47,7 @@ func InitConfig() {
 
 func GetConfigPath() string {
 	dir := os.Getenv("HOME") + "/.config/butlerburton/"
-	util.MakeDirectoryIfNotExists(dir)
+	makeDirectoryIfNotExists(dir)
 
 	fpath := path.Join(dir, "config.yml")
 
@@ -97,4 +96,11 @@ func createDefaultConfig(path string) {
 		fmt.Println("failed to create default config file")
 		panic(e)
 	}
+}
+
+func makeDirectoryIfNotExists(path string) error {
+	if _, err := os.Stat(path); os.IsNotExist(err) {
+		return os.Mkdir(path, os.ModeDir|0755)
+	}
+	return nil
 }

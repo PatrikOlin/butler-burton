@@ -1,8 +1,11 @@
 package util
 
 import (
+	"fmt"
+	"io/ioutil"
 	"log"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/koltyakov/gosip"
@@ -35,6 +38,28 @@ func DownloadBaseReport(name, monthFolder, monthFile string) string {
 
 	file.Sync()
 	return fileName
+}
+
+func UploadReport(monthFolder, department, filePath string) error {
+	sp := auth()
+	contents, err := ioutil.ReadFile(filePath)
+	if err != nil {
+		log.Fatal(err)
+		return err
+	}
+	p := strings.Split(filePath, "/")
+	fileName := p[len(p)-1]
+
+	y := time.Now().Format("2006")
+	folder := sp.Web().GetFolder(fmt.Sprintf("Tidrapporter/%s/%s/%s/", y, monthFolder, department))
+
+	_, err = folder.Files().Add(fileName, contents, true)
+	if err != nil {
+		log.Fatal(err)
+		return err
+	}
+
+	return nil
 }
 
 func auth() *api.SP {

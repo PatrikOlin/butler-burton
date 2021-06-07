@@ -134,6 +134,15 @@ func main() {
 							return cmd.SetReportFilename(c.Args().First())
 						},
 					},
+					{
+						Name:     "upload",
+						Aliases:  []string{"u"},
+						Usage:    "upload the report file to sharepoint",
+						Category: "report",
+						Action: func(c *cli.Context) error {
+							return cmd.UploadReport()
+						},
+					},
 				},
 			},
 			{

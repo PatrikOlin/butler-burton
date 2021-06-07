@@ -2,15 +2,12 @@ package xlsx
 
 import (
 	"fmt"
-	"log"
-	"path"
 	"strconv"
 	"time"
 
 	"github.com/360EntSecGroup-Skylar/excelize/v2"
 	"github.com/PatrikOlin/butler-burton/cfg"
-	"github.com/PatrikOlin/butler-burton/db"
-	"github.com/PatrikOlin/skvs"
+	"github.com/PatrikOlin/butler-burton/util"
 )
 
 func SetCheckInCellValue(ciTime time.Time, verbose bool) {
@@ -24,7 +21,7 @@ func SetCheckInCellValue(ciTime time.Time, verbose bool) {
 	sheet := f.GetSheetName(i)
 	cellCoords := cfg.Cfg.Report.CheckinCol + getRowNumber(f, sheet)
 
-	p, err := getPath()
+	p, err := util.GetFilePath()
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -80,7 +77,7 @@ func SetCheckOutCellValue(coTime time.Time, ot string, catering, verbose bool) {
 
 	f.SetCellValue(sheet, cellCoords, coTime.Format("15:04"))
 	f.SetCellValue(sheet, lunchCoords, "01:00")
-	p, err := getPath()
+	p, err := util.GetFilePath()
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -151,7 +148,7 @@ func SetEmployeeID() {
 }
 
 func openFile() (*excelize.File, error) {
-	p, err := getPath()
+	p, err := util.GetFilePath()
 	if err != nil {
 		return nil, err
 	}
@@ -168,7 +165,7 @@ func openFile() (*excelize.File, error) {
 func setCateredLunch(f *excelize.File, sheet, row string, verbose bool) {
 	blLunchCoords := cfg.Cfg.Report.BLLunchCol + row
 	str := "1"
-	p, err := getPath()
+	p, err := util.GetFilePath()
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -183,7 +180,7 @@ func setCateredLunch(f *excelize.File, sheet, row string, verbose bool) {
 func setOvertime(ot string, f *excelize.File, sheet, row string, verbose bool) {
 	overtimeCoords := cfg.Cfg.Report.OvertimeCol + row
 
-	p, err := getPath()
+	p, err := util.GetFilePath()
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -221,15 +218,15 @@ func getRowNumber(f *excelize.File, sheet string) string {
 	return rowNum
 }
 
-func getPath() (string, error) {
-	var rn string
-	if err := db.Store.Get("reportFilename", &rn); err == skvs.ErrNotFound {
-		log.Fatal("not found")
-		return "", err
-	} else if err != nil {
-		log.Fatal(err)
-		return "", err
-	} else {
-		return path.Join(cfg.Cfg.Report.Path, rn), nil
-	}
-}
+// func getPath() (string, error) {
+// 	var rn string
+// 	if err := db.Store.Get("reportFilename", &rn); err == skvs.ErrNotFound {
+// 		log.Fatal("not found")
+// 		return "", err
+// 	} else if err != nil {
+// 		log.Fatal(err)
+// 		return "", err
+// 	} else {
+// 		return path.Join(cfg.Cfg.Report.Path, rn), nil
+// 	}
+// }
