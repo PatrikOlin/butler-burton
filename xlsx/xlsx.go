@@ -164,16 +164,16 @@ func openFile() (*excelize.File, error) {
 
 func setCateredLunch(f *excelize.File, sheet, row string, verbose bool) {
 	blLunchCoords := cfg.Cfg.Report.BLLunchCol + row
-	str := "1"
 	p, err := util.GetFilePath()
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
+	t := time.Duration(1 * time.Hour)
 	f.SetCellFormula(sheet, blLunchCoords, "")
-	f.SetCellValue(sheet, blLunchCoords, str)
+	f.SetCellValue(sheet, blLunchCoords, t)
 	if verbose == true {
-		fmt.Printf("Writing %s to cell %s in %s\n", str, blLunchCoords, p)
+		fmt.Printf("Writing %s to cell %s in %s\n", t, blLunchCoords, p)
 	}
 }
 
