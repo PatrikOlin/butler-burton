@@ -169,11 +169,10 @@ func setCateredLunch(f *excelize.File, sheet, row string, verbose bool) {
 		fmt.Println(err)
 		return
 	}
-	t := time.Duration(1 * time.Hour)
 	f.SetCellFormula(sheet, blLunchCoords, "")
-	f.SetCellValue(sheet, blLunchCoords, t)
+	f.SetCellValue(sheet, blLunchCoords, 1)
 	if verbose == true {
-		fmt.Printf("Writing %s to cell %s in %s\n", t, blLunchCoords, p)
+		fmt.Printf("Writing %s to cell %s in %s\n", "1", blLunchCoords, p)
 	}
 }
 
