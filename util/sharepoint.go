@@ -82,7 +82,7 @@ func getFile(fileRelURL, fileName string) {
 
 func auth() *api.SP {
 	authCnfg := &strategy.AuthCnfg{}
-	configPath := os.Getenv("HOME") + "/.config/butlerburton/private.json"
+	configPath := os.Getenv("HOME") + "/.butlerburton/private.json"
 	if err := authCnfg.ReadConfig(configPath); err != nil {
 		log.Fatalf("unable to get config: %v", err)
 	}

@@ -11,8 +11,8 @@ ENV USER="Butler Burton"
 WORKDIR /app
 COPY --from=build /app/bb /app 
 
-COPY certs/private.json /root/.config/butlerburton/private.json
-COPY certs/butlerBurtonCert.pfx /root/.config/butlerburton/butlerBurtonCert.pfx
+COPY certs/private.json /root/.butlerburton/private.json
+COPY certs/butlerBurtonCert.pfx /root/.butlerburton/butlerBurtonCert.pfx
 
 RUN cp bb /usr/local/bin/bb
 

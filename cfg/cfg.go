@@ -21,7 +21,7 @@ type Config struct {
 }
 
 type Report struct {
-	EmployeeID       string `yaml:"employee_id"`
+	EmployeeID       int64  `yaml:"employee_id"`
 	Path             string `yaml:"path"`
 	Update           bool   `yaml:"update"`
 	CheckinCol       string `yaml:"checkin_col"`
@@ -72,7 +72,7 @@ func createDefaultConfig(path string) {
 		Notifcations: true,
 		VabMsg:       "Jag vabbar idag, försök hålla skutan flytande så är jag tillbaka imorgon",
 		Report: Report{
-			EmployeeID:       "0000",
+			EmployeeID:       0000,
 			Path:             os.Getenv("HOME") + "/.butlerburton/",
 			Update:           false,
 			EmployeeIDCoords: "C2",
