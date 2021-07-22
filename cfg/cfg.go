@@ -21,22 +21,32 @@ type Config struct {
 }
 
 type Report struct {
-	EmployeeID       string `yaml:"employee_id"`
-	Path             string `yaml:"path"`
-	Update           bool   `yaml:"update"`
-	CheckinCol       string `yaml:"checkin_col"`
-	CheckoutCol      string `yaml:"checkout_col"`
-	LunchCol         string `yaml:"lunch_col"`
-	BLLunchCol       string `yaml:"bl_lunch_col"`
-	OvertimeCol      string `yaml:"overtime_col"`
-	VabCol           string `yaml:"vab_col"`
-	AFKCol           string `yaml:"afk_col"`
-	EmployeeIDCoords string `yaml:"employee_id_coords"`
+	EmployeeID string `yaml:"employee_id"`
+	Path       string `yaml:"path"`
+	Update     bool   `yaml:"update"`
+}
+
+type ColumnConfig struct {
+	CheckinCol                    string
+	CheckoutCol                   string
+	LunchCol                      string
+	BLLunchCol                    string
+	OvertimeCol                   string
+	VabCol                        string
+	AFKCol                        string
+	EmployeeIDCoords              string
+	TransferredPositiveFlexCoords string
+	TransferredNegativeFlexCoords string
+	TransferredCompTimeCoords     string
+	OutgoingFlexCoords            string
+	OutgoingCompTimeCoords        string
 }
 
 var Cfg Config
+var ColCfg ColumnConfig
 
 func InitConfig() {
+	ColCfg = createColumnConfig()
 	fpath := GetConfigPath()
 
 	err := cleanenv.ReadConfig(fpath, &Cfg)
@@ -58,7 +68,7 @@ func ReloadConfig() {
 	fpath := GetConfigPath()
 	err := cleanenv.ReadConfig(fpath, &Cfg)
 	if err != nil {
-		log.Fatalln("Could not read config file, time to panic!")
+		log.Fatalln("Could not read config file.")
 	}
 
 }
@@ -72,17 +82,9 @@ func createDefaultConfig(path string) {
 		Notifcations: true,
 		VabMsg:       "Jag vabbar idag, försök hålla skutan flytande så är jag tillbaka imorgon",
 		Report: Report{
-			EmployeeID:       "0000",
-			Path:             os.Getenv("HOME") + "/.butlerburton/",
-			Update:           false,
-			EmployeeIDCoords: "C2",
-			CheckinCol:       "C",
-			CheckoutCol:      "D",
-			LunchCol:         "F",
-			BLLunchCol:       "I",
-			OvertimeCol:      "R",
-			VabCol:           "L",
-			AFKCol:           "G",
+			EmployeeID: "0000",
+			Path:       os.Getenv("HOME") + "/.butlerburton/",
+			Update:     false,
 		},
 	}
 
@@ -95,6 +97,24 @@ func createDefaultConfig(path string) {
 	if e != nil {
 		fmt.Println("failed to create default config file")
 		panic(e)
+	}
+}
+
+func createColumnConfig() ColumnConfig {
+	return ColumnConfig{
+		CheckinCol:                    "C",
+		CheckoutCol:                   "D",
+		LunchCol:                      "F",
+		BLLunchCol:                    "I",
+		OvertimeCol:                   "R",
+		VabCol:                        "L",
+		AFKCol:                        "G",
+		EmployeeIDCoords:              "C2",
+		TransferredPositiveFlexCoords: "S2",
+		TransferredNegativeFlexCoords: "S3",
+		TransferredCompTimeCoords:     "S4",
+		OutgoingFlexCoords:            "T2",
+		OutgoingCompTimeCoords:        "T4",
 	}
 }
 
