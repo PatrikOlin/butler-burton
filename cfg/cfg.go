@@ -12,12 +12,12 @@ import (
 )
 
 type Config struct {
-	Name         string `yaml:"name"`
-	Color        string `yaml:"color"`
-	WebhookURL   string `yaml:"webhook_url"`
-	Notifcations bool   `yaml:"notifications"`
-	VabMsg       string `yaml:"vab_msg"`
-	Report       Report `yaml:"report"`
+	Name          string `yaml:"name"`
+	Color         string `yaml:"color"`
+	WebhookURL    string `yaml:"webhook_url"`
+	Notifications bool   `yaml:"notifications"`
+	VabMsg        string `yaml:"vab_msg"`
+	Report        Report `yaml:"report"`
 }
 
 type Report struct {
@@ -34,6 +34,7 @@ type ColumnConfig struct {
 	OvertimeCol                   string
 	VabCol                        string
 	AFKCol                        string
+	ExerciseCol                   string
 	EmployeeIDCoords              string
 	TransferredPositiveFlexCoords string
 	TransferredNegativeFlexCoords string
@@ -76,11 +77,11 @@ func ReloadConfig() {
 func createDefaultConfig(path string) {
 	fmt.Println("failed to read config file, creating config with default values")
 	Cfg = Config{
-		Name:         os.Getenv("USER"),
-		Color:        "#46D9FF",
-		WebhookURL:   "",
-		Notifcations: true,
-		VabMsg:       "Jag vabbar idag, försök hålla skutan flytande så är jag tillbaka imorgon",
+		Name:          os.Getenv("USER"),
+		Color:         "#46D9FF",
+		WebhookURL:    "",
+		Notifications: true,
+		VabMsg:        "Jag vabbar idag, försök hålla skutan flytande så är jag tillbaka imorgon",
 		Report: Report{
 			EmployeeID: "0000",
 			Path:       os.Getenv("HOME") + "/.butlerburton/",
@@ -109,6 +110,7 @@ func createColumnConfig() ColumnConfig {
 		OvertimeCol:                   "R",
 		VabCol:                        "L",
 		AFKCol:                        "G",
+		ExerciseCol:                   "J",
 		EmployeeIDCoords:              "C2",
 		TransferredPositiveFlexCoords: "S2",
 		TransferredNegativeFlexCoords: "S3",

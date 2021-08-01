@@ -61,7 +61,7 @@ func Checkout(opts util.Options) error {
 			xlsx.SetCheckOutCellValue(roundedNow, "", opts.Catered, opts.Verbose)
 		}
 
-		if cfg.Cfg.Notifcations {
+		if cfg.Cfg.Notifications {
 			n := fmt.Sprintf("%s%s \n", checkedInMsg, checkedInDurMsg)
 			util.Notify("Checking out \n", n)
 		}

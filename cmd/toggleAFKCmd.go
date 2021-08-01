@@ -14,19 +14,19 @@ import (
 func ToggleAFK(reason string, opts util.Options) error {
 	var isAFK bool
 	if err := db.Store.Get("isAFK", &isAFK); err == skvs.ErrNotFound {
-		setAFK(reason)
+		setAFK(reason, opts)
 	} else if err != nil {
 		return err
 	} else if !isAFK {
-		setAFK(reason)
+		setAFK(reason, opts)
 	} else {
-		removeAFK(reason)
+		removeAFK(reason, opts)
 	}
 
 	return nil
 }
 
-func setAFK(reason string) {
+func setAFK(reason string, opts util.Options) {
 	t := time.Now().Unix()
 	db.Store.Put("isAFK", true)
 	db.Store.Put("AFKStartUnix", t)
@@ -36,7 +36,7 @@ func setAFK(reason string) {
 	db.Store.Get("isAFK", &isAFK)
 	db.Store.Get("AFKStartUnix", &tu)
 
-	if cfg.Cfg.Notifcations {
+	if cfg.Cfg.Notifications {
 		util.Notify("Checkar ut som AFK \n", time.Now().Format("15:04:05"))
 	}
 
@@ -47,13 +47,17 @@ func setAFK(reason string) {
 		msg = "Checkar ut, återkommer senare idag"
 	}
 
-	util.SendTeamsMessage(
-		fmt.Sprintf("%s checkar ut en stund", cfg.Cfg.Name),
-		msg,
-		cfg.Cfg.Color, cfg.Cfg.WebhookURL)
+	if !opts.Silent {
+		util.SendTeamsMessage(
+			fmt.Sprintf("%s checkar ut en stund", cfg.Cfg.Name),
+			msg,
+			cfg.Cfg.Color,
+			cfg.Cfg.WebhookURL,
+		)
+	}
 }
 
-func removeAFK(reason string) {
+func removeAFK(reason string, opts util.Options) {
 	var t1 int64
 
 	db.Store.Put("isAFK", false)
@@ -63,7 +67,7 @@ func removeAFK(reason string) {
 		fmt.Println(err)
 	} else {
 		t2 := time.Now().Unix()
-		t3 := calculateAFKDuration(t1, t2)
+		t3 := calculateDuration(t1, t2)
 
 		d := (15 * time.Minute)
 		dur := t3.Round(d)
@@ -78,12 +82,16 @@ func removeAFK(reason string) {
 			msg = " "
 		}
 
-		util.SendTeamsMessage(
-			fmt.Sprintf("Äntligen är %s tillbaka!", cfg.Cfg.Name),
-			msg,
-			cfg.Cfg.Color, cfg.Cfg.WebhookURL)
+		if !opts.Silent {
+			util.SendTeamsMessage(
+				fmt.Sprintf("Äntligen är %s tillbaka!", cfg.Cfg.Name),
+				msg,
+				cfg.Cfg.Color,
+				cfg.Cfg.WebhookURL,
+			)
+		}
 
-		if cfg.Cfg.Notifcations {
+		if cfg.Cfg.Notifications {
 			util.Notify("Checkar in igen \n", time.Now().Format("15:04:05"))
 		}
 
@@ -93,7 +101,7 @@ func removeAFK(reason string) {
 	}
 }
 
-func calculateAFKDuration(unix1, unix2 int64) time.Duration {
+func calculateDuration(unix1, unix2 int64) time.Duration {
 	t1 := time.Unix(unix1, 0)
 	t2 := time.Unix(unix2, 0)
 

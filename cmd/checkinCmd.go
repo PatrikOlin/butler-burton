@@ -30,7 +30,7 @@ func Checkin(opts util.Options) error {
 		xlsx.SetCheckInCellValue(rounded, opts.Verbose)
 	}
 
-	if cfg.Cfg.Notifcations {
+	if cfg.Cfg.Notifications {
 		util.Notify("Checking in \n", checkinMsg)
 	}
 	return nil
@@ -48,7 +48,7 @@ func VabCheckin() error {
 		xlsx.SetVabCheckin()
 	}
 
-	if cfg.Cfg.Notifcations {
+	if cfg.Cfg.Notifications {
 		util.Notify("Reporting vab \n", "")
 	}
 

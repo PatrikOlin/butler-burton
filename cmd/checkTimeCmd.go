@@ -26,7 +26,7 @@ func CheckTime() error {
 		fmt.Printf(checkInTimeMsg)
 		fmt.Printf(timeCheckedInMsg)
 
-		if cfg.Cfg.Notifcations {
+		if cfg.Cfg.Notifications {
 			n := fmt.Sprintf("%s%s \n", checkInTimeMsg, timeCheckedInMsg)
 			util.Notify("Checked in duration \n", n)
 		}

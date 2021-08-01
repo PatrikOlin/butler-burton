@@ -27,6 +27,7 @@ func main() {
 		Overtime:   false,
 		Vab:        false,
 		ShowStatus: false,
+		Silent:     false,
 	}
 
 	app := &cli.App{
@@ -43,6 +44,13 @@ func main() {
 		Flags: []cli.Flag{
 			&cli.BoolFlag{
 				Name:        "verbose",
+				Value:       false,
+				Usage:       "Turn on verbose mode",
+				Destination: &opts.Verbose,
+			},
+			&cli.BoolFlag{
+				Name:        "silent",
+				Aliases:     []string{"s"},
 				Value:       false,
 				Usage:       "Turn on verbose mode",
 				Destination: &opts.Verbose,
@@ -176,6 +184,14 @@ func main() {
 				Usage:   "set afk status",
 				Action: func(c *cli.Context) error {
 					return cmd.ToggleAFK(c.Args().Get(0), opts)
+				},
+			},
+			{
+				Name:    "exercise",
+				Aliases: []string{"ex"},
+				Usage:   "set exercise status",
+				Action: func(c *cli.Context) error {
+					return cmd.ToggleExercise(c.Args().Get(0), opts)
 				},
 			},
 		},

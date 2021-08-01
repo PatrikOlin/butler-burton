@@ -147,6 +147,28 @@ func SetEmployeeID() {
 	}
 }
 
+func SetExerciseCellValue(exerciseDuration string) {
+	f, err := openFile()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	i := f.GetActiveSheetIndex()
+	sheet := f.GetSheetName(i)
+
+	row := getRowNumber(f, sheet)
+	exerciseCoords := cfg.ColCfg.ExerciseCol + row
+
+	f.SetCellValue(sheet, exerciseCoords, exerciseDuration)
+
+	err = f.Save()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+}
+
 func openFile() (*excelize.File, error) {
 	p, err := util.GetFilePath()
 	if err != nil {
