@@ -4,7 +4,7 @@
 > cd butler-burton <br>
 > make install
 
-or download binary and run it
+or download the binary and run it
 
 ## Configuration
 
@@ -39,7 +39,14 @@ docker run -it "imageName" sh
 
 ### Get report
 
-```
+```sh
 docker ps (get containerId)
 docker cp "containerId":/root/.butlerburton/"reportName.xlsx" .
+```
+
+### Generate man page from butlerburton.md
+
+```sh
+pandoc butlerburton.md -s -t man -o butler-burton.1
+gzip butler-burton.1
 ```
