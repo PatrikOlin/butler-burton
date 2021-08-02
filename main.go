@@ -72,7 +72,7 @@ func main() {
 				},
 				Action: func(c *cli.Context) error {
 					if opts.Vab {
-						return cmd.VabCheckin()
+						return cmd.VabCheckin(opts)
 					}
 					return cmd.Checkin(opts)
 				},

@@ -29,22 +29,24 @@ func setIsExercising(msg string, opts util.Options) {
 	t := time.Now().Unix()
 	db.Store.Put("isExercising", true)
 	db.Store.Put("exerciseStartUnix", t)
+	m := fmt.Sprintf("Checked out for excercise at %s", time.Unix(t, 0).Local().Format("15:04:05"))
+	fmt.Println(m)
 
 	if cfg.Cfg.Notifications {
 		util.Notify("Checkar ut för friskvård \n", time.Now().Format("15:04:05"))
 	}
 
-	var m string
+	var message string
 	if msg != "" {
-		m = msg
+		message = msg
 	} else {
-		m = "Drar iväg och friskvårdar lite"
+		message = "Drar iväg och friskvårdar lite"
 	}
 
 	if !opts.Silent {
 		util.SendTeamsMessage(
-			fmt.Sprintf("%s checkar ut en stund", m),
-			m,
+			fmt.Sprintf("%s checkar ut en stund", cfg.Cfg.Name),
+			message,
 			cfg.Cfg.Color,
 			cfg.Cfg.WebhookURL)
 	}
@@ -68,6 +70,8 @@ func removeIsExercising(opts util.Options) {
 
 		db.Store.Put("exerciseDuration", dur)
 		db.Store.Delete("exerciseStartUnix")
+		msg := fmt.Sprintf("Checked in after excercise at %s", time.Unix(t2, 0).Local().Format("15:04:05"))
+		fmt.Println(msg)
 	}
 
 	if !opts.Silent {
