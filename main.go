@@ -32,11 +32,11 @@ func main() {
 
 	app := &cli.App{
 		Name:     "Butler Burton",
-		Usage:    "Your personal butler",
+		Usage:    "a smartish utility to manage your BL time sheet",
 		Version:  Version,
 		Compiled: time.Now(),
 		Authors: []*cli.Author{
-			&cli.Author{
+			{
 				Name:  "Patrik Olin",
 				Email: "patrik@olin.work",
 			},
@@ -45,15 +45,15 @@ func main() {
 			&cli.BoolFlag{
 				Name:        "verbose",
 				Value:       false,
-				Usage:       "Turn on verbose mode",
+				Usage:       "turn on verbose mode",
 				Destination: &opts.Verbose,
 			},
 			&cli.BoolFlag{
 				Name:        "silent",
 				Aliases:     []string{"s"},
 				Value:       false,
-				Usage:       "Turn on verbose mode",
-				Destination: &opts.Verbose,
+				Usage:       "don't send Teams messages",
+				Destination: &opts.Silent,
 			},
 		},
 		Commands: []*cli.Command{
@@ -66,7 +66,7 @@ func main() {
 						Name:        "vab",
 						Aliases:     []string{"v"},
 						Value:       false,
-						Usage:       "Check in as absent as result of vab",
+						Usage:       "check in as absent as result of vab",
 						Destination: &opts.Vab,
 					},
 				},
@@ -86,14 +86,14 @@ func main() {
 						Name:        "catered",
 						Aliases:     []string{"c"},
 						Value:       false,
-						Usage:       "Check BL-lunch field in report for todays shift",
+						Usage:       "check BL-lunch field in report for todays shift",
 						Destination: &opts.Catered,
 					},
 					&cli.BoolFlag{
 						Name:        "overtime",
 						Aliases:     []string{"o"},
 						Value:       false,
-						Usage:       "Write overtime to overtime column",
+						Usage:       "write overtime to overtime column",
 						Destination: &opts.Overtime,
 					},
 				},

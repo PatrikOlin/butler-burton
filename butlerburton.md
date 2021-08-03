@@ -1,5 +1,5 @@
 % butler-burton(1) butler-burton
-% Patrik Olin, patrik@olin.work
+% Patrik Olin <patrik@olin.work>
 % August 2021
 
 # NAME

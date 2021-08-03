@@ -48,13 +48,13 @@ func setIsExercising(msg string, opts util.Options) {
 			fmt.Sprintf("%s checkar ut en stund", cfg.Cfg.Name),
 			message,
 			cfg.Cfg.Color,
-			cfg.Cfg.WebhookURL)
+			cfg.Cfg.WebhookURL,
+		)
 	}
 }
 
 func removeIsExercising(opts util.Options) {
 	var t1 int64
-	var dur time.Duration
 
 	db.Store.Put("isExercising", false)
 	if err := db.Store.Get("exerciseStartUnix", &t1); err == skvs.ErrNotFound {
@@ -70,32 +70,32 @@ func removeIsExercising(opts util.Options) {
 
 		db.Store.Put("exerciseDuration", dur)
 		db.Store.Delete("exerciseStartUnix")
-		msg := fmt.Sprintf("Checked in after excercise at %s", time.Unix(t2, 0).Local().Format("15:04:05"))
+		msg := fmt.Sprintf("Checked in after excercising for %s", fmtDuration(dur))
 		fmt.Println(msg)
-	}
 
-	if !opts.Silent {
-		util.SendTeamsMessage(
-			fmt.Sprintf("Äntligen är %s tillbaka!", cfg.Cfg.Name),
-			"",
-			cfg.Cfg.Color,
-			cfg.Cfg.WebhookURL,
-		)
-	}
+		if !opts.Silent {
+			util.SendTeamsMessage(
+				fmt.Sprintf("Äntligen är %s tillbaka!", cfg.Cfg.Name),
+				"",
+				cfg.Cfg.Color,
+				cfg.Cfg.WebhookURL,
+			)
+		}
 
-	if cfg.Cfg.Notifications {
-		util.Notify("Checkar in igen \n", time.Now().Format("15:04:05"))
-	}
+		if cfg.Cfg.Notifications {
+			util.Notify("Checkar in igen \n", time.Now().Format("15:04:05"))
+		}
 
-	if cfg.Cfg.Report.Update {
-		xlsx.SetExerciseCellValue(fmtDuration(dur))
+		if cfg.Cfg.Report.Update {
+			xlsx.SetExerciseCellValue(fmtDuration(dur))
+		}
 	}
-
 }
 
 func calculateDurationLunchException(unix1, unix2 int64) time.Duration {
 	t1 := time.Unix(unix1, 0)
 	t2 := time.Unix(unix2, 0)
+
 	lunchStart, err := time.Parse("15:04", "12:00")
 	lunchEnd, err := time.Parse("15:04", "13:00")
 	if err != nil {

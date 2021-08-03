@@ -26,7 +26,12 @@ install:
 
 ## build: build binary, runs 'go build' internally
 build:
-	go build $(LDFLAGS) -o $(PROJECTNAME) 
+	go build $(LDFLAGS) -o $(PROJECTNAME)
+
+## generate and gzip manppage from markdown, uses pandoc
+manpage:
+	pandoc butlerburton.md -s -t man -o butler-burton.1
+	gzip butler-burton.1
 
 .PHONY: help
 all: help
