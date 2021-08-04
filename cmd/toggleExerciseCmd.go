@@ -95,15 +95,14 @@ func removeIsExercising(opts util.Options) {
 func calculateDurationLunchException(unix1, unix2 int64) time.Duration {
 	t1 := time.Unix(unix1, 0)
 	t2 := time.Unix(unix2, 0)
+	now := time.Now().Local()
+	yyyy, mm, dd := now.Date()
 
-	lunchStart, err := time.Parse("15:04", "12:00")
-	lunchEnd, err := time.Parse("15:04", "13:00")
-	if err != nil {
-		fmt.Println(err)
-	}
+	lunchStart := time.Date(yyyy, mm, dd, 12, 0, 0, 0, now.Location())
+	lunchEnd := time.Date(yyyy, mm, dd, 13, 0, 0, 0, now.Location())
 
 	if t1.Local().Before(lunchStart) && t2.Local().After(lunchEnd) {
-		t2.Add(-1 * time.Hour)
+		t2 = t2.Add(-1 * time.Hour)
 	}
 
 	dur := t2.Sub(t1)
