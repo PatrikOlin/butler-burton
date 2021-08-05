@@ -52,7 +52,7 @@ func main() {
 				Name:        "silent",
 				Aliases:     []string{"s"},
 				Value:       false,
-				Usage:       "don't send Teams messages",
+				Usage:       "turn on silent mode for this command (no Teams message)",
 				Destination: &opts.Silent,
 			},
 		},
@@ -110,16 +110,16 @@ func main() {
 				},
 			},
 			{
-				Name:     "report",
-				Aliases:  []string{"r"},
-				Usage:    "report commands",
-				Category: "report",
+				Name:     "time sheet",
+				Aliases:  []string{"ts"},
+				Usage:    "commands directly related to time sheet",
+				Category: "time sheet",
 				Subcommands: []*cli.Command{
 					{
 						Name:     "create",
 						Aliases:  []string{"c"},
-						Usage:    "download original report file and name it according to month and username",
-						Category: "report",
+						Usage:    "download original time sheet and name it according to month and username",
+						Category: "time sheet",
 						Action: func(c *cli.Context) error {
 							return cmd.CreateNewReport()
 						},
@@ -127,8 +127,8 @@ func main() {
 					{
 						Name:     "get",
 						Aliases:  []string{"g"},
-						Usage:    "get current report filename",
-						Category: "report",
+						Usage:    "get current time sheet filename",
+						Category: "time sheet",
 						Action: func(c *cli.Context) error {
 							return cmd.GetReportFilename()
 						},
@@ -136,8 +136,8 @@ func main() {
 					{
 						Name:     "set",
 						Aliases:  []string{"s"},
-						Usage:    "set new report filename",
-						Category: "report",
+						Usage:    "set new time sheet filename",
+						Category: "time sheet",
 						Action: func(c *cli.Context) error {
 							return cmd.SetReportFilename(c.Args().First())
 						},
@@ -145,8 +145,8 @@ func main() {
 					{
 						Name:     "upload",
 						Aliases:  []string{"u"},
-						Usage:    "upload the report file to sharepoint",
-						Category: "report",
+						Usage:    "upload the time sheet to sharepoint",
+						Category: "time sheet",
 						Action: func(c *cli.Context) error {
 							return cmd.UploadReport()
 						},
@@ -154,8 +154,8 @@ func main() {
 					{
 						Name:     "download",
 						Aliases:  []string{"d"},
-						Usage:    "download the report file from sharepoint",
-						Category: "report",
+						Usage:    "download the time sheet from sharepoint",
+						Category: "time sheet",
 						Action: func(c *cli.Context) error {
 							return cmd.DownloadReport()
 						},
@@ -163,19 +163,29 @@ func main() {
 				},
 			},
 			{
-				Name:    "edit",
-				Aliases: []string{"e"},
-				Usage:   "edit config-file",
-				Action: func(c *cli.Context) error {
-					return cmd.EditConfig()
-				},
-			},
-			{
-				Name:    "print",
-				Aliases: []string{"p"},
-				Usage:   "print config-file",
-				Action: func(c *cli.Context) error {
-					return cmd.PrintConfig()
+				Name:     "config",
+				Aliases:  []string{"c"},
+				Usage:    "commands directly related to config",
+				Category: "config",
+				Subcommands: []*cli.Command{
+					{
+						Name:     "edit",
+						Aliases:  []string{"e"},
+						Usage:    "edit config-file",
+						Category: "config",
+						Action: func(c *cli.Context) error {
+							return cmd.EditConfig()
+						},
+					},
+					{
+						Name:     "print",
+						Aliases:  []string{"p"},
+						Usage:    "print config-file",
+						Category: "config",
+						Action: func(c *cli.Context) error {
+							return cmd.PrintConfig()
+						},
+					},
 				},
 			},
 			{
