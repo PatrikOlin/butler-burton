@@ -21,6 +21,7 @@ vab_msg: "Jag vabbar idag, försök hålla skutan flytande så är jag tillbaks 
 report:
     employee_id: "0000",
     path: "/home/burton/.butlerburton/"
+    update: true
 ```
 
 ## Development
