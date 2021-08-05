@@ -21,34 +21,39 @@ func Checkin(opts util.Options) error {
 	dr := rounded.Format("15:04:05")
 	checkinMsg := fmt.Sprintf("Ok, checked in at %s (%s)\n", de, dr)
 	fmt.Println(checkinMsg)
-	util.SendTeamsMessage(
-		fmt.Sprintf("%s checkar in", cfg.Cfg.Name),
-		"Incheckad från "+string(de),
-		cfg.Cfg.Color, cfg.Cfg.WebhookURL)
+
+	if !opts.Silent {
+		util.SendTeamsMessage(
+			fmt.Sprintf("%s checkar in", cfg.Cfg.Name),
+			"Incheckad från "+string(de),
+			cfg.Cfg.Color, cfg.Cfg.WebhookURL)
+	}
 
 	if cfg.Cfg.Report.Update {
 		xlsx.SetCheckInCellValue(rounded, opts.Verbose)
 	}
 
-	if cfg.Cfg.Notifcations {
+	if cfg.Cfg.Notifications {
 		util.Notify("Checking in \n", checkinMsg)
 	}
 	return nil
 }
 
-func VabCheckin() error {
-	util.SendTeamsMessage(
-		fmt.Sprintf("%s vabbar", cfg.Cfg.Name),
-		cfg.Cfg.VabMsg,
-		cfg.Cfg.Color,
-		cfg.Cfg.WebhookURL,
-	)
+func VabCheckin(opts util.Options) error {
+	if !opts.Silent {
+		util.SendTeamsMessage(
+			fmt.Sprintf("%s vabbar", cfg.Cfg.Name),
+			cfg.Cfg.VabMsg,
+			cfg.Cfg.Color,
+			cfg.Cfg.WebhookURL,
+		)
+	}
 
 	if cfg.Cfg.Report.Update {
 		xlsx.SetVabCheckin()
 	}
 
-	if cfg.Cfg.Notifcations {
+	if cfg.Cfg.Notifications {
 		util.Notify("Reporting vab \n", "")
 	}
 

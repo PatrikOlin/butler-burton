@@ -12,31 +12,42 @@ import (
 )
 
 type Config struct {
-	Name         string `yaml:"name"`
-	Color        string `yaml:"color"`
-	WebhookURL   string `yaml:"webhook_url"`
-	Notifcations bool   `yaml:"notifications"`
-	VabMsg       string `yaml:"vab_msg"`
-	Report       Report `yaml:"report"`
+	Name          string `yaml:"name"`
+	Color         string `yaml:"color"`
+	WebhookURL    string `yaml:"webhook_url"`
+	Notifications bool   `yaml:"notifications"`
+	VabMsg        string `yaml:"vab_msg"`
+	Report        Report `yaml:"report"`
 }
 
 type Report struct {
-	EmployeeID       int64  `yaml:"employee_id"`
-	Path             string `yaml:"path"`
-	Update           bool   `yaml:"update"`
-	CheckinCol       string `yaml:"checkin_col"`
-	CheckoutCol      string `yaml:"checkout_col"`
-	LunchCol         string `yaml:"lunch_col"`
-	BLLunchCol       string `yaml:"bl_lunch_col"`
-	OvertimeCol      string `yaml:"overtime_col"`
-	VabCol           string `yaml:"vab_col"`
-	AFKCol           string `yaml:"afk_col"`
-	EmployeeIDCoords string `yaml:"employee_id_coords"`
+	EmployeeID string `yaml:"employee_id"`
+	Path       string `yaml:"path"`
+	Update     bool   `yaml:"update"`
+}
+
+type ColumnConfig struct {
+	CheckinCol                    string
+	CheckoutCol                   string
+	LunchCol                      string
+	BLLunchCol                    string
+	OvertimeCol                   string
+	VabCol                        string
+	AFKCol                        string
+	ExerciseCol                   string
+	EmployeeIDCoords              string
+	TransferredPositiveFlexCoords string
+	TransferredNegativeFlexCoords string
+	TransferredCompTimeCoords     string
+	OutgoingFlexCoords            string
+	OutgoingCompTimeCoords        string
 }
 
 var Cfg Config
+var ColCfg ColumnConfig
 
 func InitConfig() {
+	ColCfg = createColumnConfig()
 	fpath := GetConfigPath()
 
 	err := cleanenv.ReadConfig(fpath, &Cfg)
@@ -58,7 +69,7 @@ func ReloadConfig() {
 	fpath := GetConfigPath()
 	err := cleanenv.ReadConfig(fpath, &Cfg)
 	if err != nil {
-		log.Fatalln("Could not read config file, time to panic!")
+		log.Fatalln("Could not read config file.")
 	}
 
 }
@@ -66,23 +77,15 @@ func ReloadConfig() {
 func createDefaultConfig(path string) {
 	fmt.Println("failed to read config file, creating config with default values")
 	Cfg = Config{
-		Name:         os.Getenv("USER"),
-		Color:        "#46D9FF",
-		WebhookURL:   "",
-		Notifcations: true,
-		VabMsg:       "Jag vabbar idag, försök hålla skutan flytande så är jag tillbaka imorgon",
+		Name:          os.Getenv("USER"),
+		Color:         "#46D9FF",
+		WebhookURL:    "",
+		Notifications: true,
+		VabMsg:        "Jag vabbar idag, försök hålla skutan flytande så är jag tillbaka imorgon",
 		Report: Report{
-			EmployeeID:       0000,
-			Path:             os.Getenv("HOME") + "/.butlerburton/",
-			Update:           false,
-			EmployeeIDCoords: "C2",
-			CheckinCol:       "C",
-			CheckoutCol:      "D",
-			LunchCol:         "F",
-			BLLunchCol:       "I",
-			OvertimeCol:      "R",
-			VabCol:           "L",
-			AFKCol:           "G",
+			EmployeeID: "0000",
+			Path:       os.Getenv("HOME") + "/.butlerburton/",
+			Update:     false,
 		},
 	}
 
@@ -95,6 +98,25 @@ func createDefaultConfig(path string) {
 	if e != nil {
 		fmt.Println("failed to create default config file")
 		panic(e)
+	}
+}
+
+func createColumnConfig() ColumnConfig {
+	return ColumnConfig{
+		CheckinCol:                    "C",
+		CheckoutCol:                   "D",
+		LunchCol:                      "F",
+		BLLunchCol:                    "I",
+		OvertimeCol:                   "R",
+		VabCol:                        "L",
+		AFKCol:                        "G",
+		ExerciseCol:                   "J",
+		EmployeeIDCoords:              "C2",
+		TransferredPositiveFlexCoords: "S2",
+		TransferredNegativeFlexCoords: "S3",
+		TransferredCompTimeCoords:     "S4",
+		OutgoingFlexCoords:            "T2",
+		OutgoingCompTimeCoords:        "T4",
 	}
 }
 

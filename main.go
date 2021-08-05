@@ -27,15 +27,16 @@ func main() {
 		Overtime:   false,
 		Vab:        false,
 		ShowStatus: false,
+		Silent:     false,
 	}
 
 	app := &cli.App{
 		Name:     "Butler Burton",
-		Usage:    "Your personal butler",
+		Usage:    "a smartish utility to manage your BL time sheet",
 		Version:  Version,
 		Compiled: time.Now(),
 		Authors: []*cli.Author{
-			&cli.Author{
+			{
 				Name:  "Patrik Olin",
 				Email: "patrik@olin.work",
 			},
@@ -44,8 +45,15 @@ func main() {
 			&cli.BoolFlag{
 				Name:        "verbose",
 				Value:       false,
-				Usage:       "Turn on verbose mode",
+				Usage:       "turn on verbose mode",
 				Destination: &opts.Verbose,
+			},
+			&cli.BoolFlag{
+				Name:        "silent",
+				Aliases:     []string{"s"},
+				Value:       false,
+				Usage:       "turn on silent mode for this command (no Teams message)",
+				Destination: &opts.Silent,
 			},
 		},
 		Commands: []*cli.Command{
@@ -58,13 +66,13 @@ func main() {
 						Name:        "vab",
 						Aliases:     []string{"v"},
 						Value:       false,
-						Usage:       "Check in as absent as result of vab",
+						Usage:       "check in as absent as result of vab",
 						Destination: &opts.Vab,
 					},
 				},
 				Action: func(c *cli.Context) error {
 					if opts.Vab {
-						return cmd.VabCheckin()
+						return cmd.VabCheckin(opts)
 					}
 					return cmd.Checkin(opts)
 				},
@@ -78,14 +86,14 @@ func main() {
 						Name:        "catered",
 						Aliases:     []string{"c"},
 						Value:       false,
-						Usage:       "Check BL-lunch field in report for todays shift",
+						Usage:       "check BL-lunch field in report for todays shift",
 						Destination: &opts.Catered,
 					},
 					&cli.BoolFlag{
 						Name:        "overtime",
 						Aliases:     []string{"o"},
 						Value:       false,
-						Usage:       "Write overtime to overtime column",
+						Usage:       "write overtime to overtime column",
 						Destination: &opts.Overtime,
 					},
 				},
@@ -102,16 +110,16 @@ func main() {
 				},
 			},
 			{
-				Name:     "report",
-				Aliases:  []string{"r"},
-				Usage:    "report commands",
-				Category: "report",
+				Name:     "time sheet",
+				Aliases:  []string{"ts"},
+				Usage:    "commands directly related to time sheet",
+				Category: "time sheet",
 				Subcommands: []*cli.Command{
 					{
 						Name:     "create",
 						Aliases:  []string{"c"},
-						Usage:    "download original report file and name it according to month and username",
-						Category: "report",
+						Usage:    "download original time sheet and name it according to month and username",
+						Category: "time sheet",
 						Action: func(c *cli.Context) error {
 							return cmd.CreateNewReport()
 						},
@@ -119,8 +127,8 @@ func main() {
 					{
 						Name:     "get",
 						Aliases:  []string{"g"},
-						Usage:    "get current report filename",
-						Category: "report",
+						Usage:    "get current time sheet filename",
+						Category: "time sheet",
 						Action: func(c *cli.Context) error {
 							return cmd.GetReportFilename()
 						},
@@ -128,8 +136,8 @@ func main() {
 					{
 						Name:     "set",
 						Aliases:  []string{"s"},
-						Usage:    "set new report filename",
-						Category: "report",
+						Usage:    "set new time sheet filename",
+						Category: "time sheet",
 						Action: func(c *cli.Context) error {
 							return cmd.SetReportFilename(c.Args().First())
 						},
@@ -137,8 +145,8 @@ func main() {
 					{
 						Name:     "upload",
 						Aliases:  []string{"u"},
-						Usage:    "upload the report file to sharepoint",
-						Category: "report",
+						Usage:    "upload the time sheet to sharepoint",
+						Category: "time sheet",
 						Action: func(c *cli.Context) error {
 							return cmd.UploadReport()
 						},
@@ -146,8 +154,8 @@ func main() {
 					{
 						Name:     "download",
 						Aliases:  []string{"d"},
-						Usage:    "download the report file from sharepoint",
-						Category: "report",
+						Usage:    "download the time sheet from sharepoint",
+						Category: "time sheet",
 						Action: func(c *cli.Context) error {
 							return cmd.DownloadReport()
 						},
@@ -155,19 +163,29 @@ func main() {
 				},
 			},
 			{
-				Name:    "edit",
-				Aliases: []string{"e"},
-				Usage:   "edit config-file",
-				Action: func(c *cli.Context) error {
-					return cmd.EditConfig()
-				},
-			},
-			{
-				Name:    "print",
-				Aliases: []string{"p"},
-				Usage:   "print config-file",
-				Action: func(c *cli.Context) error {
-					return cmd.PrintConfig()
+				Name:     "config",
+				Aliases:  []string{"c"},
+				Usage:    "commands directly related to config",
+				Category: "config",
+				Subcommands: []*cli.Command{
+					{
+						Name:     "edit",
+						Aliases:  []string{"e"},
+						Usage:    "edit config-file",
+						Category: "config",
+						Action: func(c *cli.Context) error {
+							return cmd.EditConfig()
+						},
+					},
+					{
+						Name:     "print",
+						Aliases:  []string{"p"},
+						Usage:    "print config-file",
+						Category: "config",
+						Action: func(c *cli.Context) error {
+							return cmd.PrintConfig()
+						},
+					},
 				},
 			},
 			{
@@ -176,6 +194,14 @@ func main() {
 				Usage:   "set afk status",
 				Action: func(c *cli.Context) error {
 					return cmd.ToggleAFK(c.Args().Get(0), opts)
+				},
+			},
+			{
+				Name:    "exercise",
+				Aliases: []string{"ex"},
+				Usage:   "set exercise status",
+				Action: func(c *cli.Context) error {
+					return cmd.ToggleExercise(c.Args().Get(0), opts)
 				},
 			},
 		},

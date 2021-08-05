@@ -19,7 +19,7 @@ func SetCheckInCellValue(ciTime time.Time, verbose bool) {
 
 	i := f.GetActiveSheetIndex()
 	sheet := f.GetSheetName(i)
-	cellCoords := cfg.Cfg.Report.CheckinCol + getRowNumber(f, sheet)
+	cellCoords := cfg.ColCfg.CheckinCol + getRowNumber(f, sheet)
 
 	p, err := util.GetFilePath()
 	if err != nil {
@@ -50,7 +50,7 @@ func SetVabCheckin() {
 	sheet := f.GetSheetName(i)
 
 	row := getRowNumber(f, sheet)
-	vabCoords := cfg.Cfg.Report.VabCol + row
+	vabCoords := cfg.ColCfg.VabCol + row
 
 	f.SetCellValue(sheet, vabCoords, "08:00")
 
@@ -72,8 +72,8 @@ func SetCheckOutCellValue(coTime time.Time, ot string, catering, verbose bool) {
 	sheet := f.GetSheetName(i)
 
 	row := getRowNumber(f, sheet)
-	cellCoords := cfg.Cfg.Report.CheckoutCol + row
-	lunchCoords := cfg.Cfg.Report.LunchCol + row
+	cellCoords := cfg.ColCfg.CheckoutCol + row
+	lunchCoords := cfg.ColCfg.LunchCol + row
 
 	f.SetCellValue(sheet, cellCoords, coTime.Format("15:04"))
 	f.SetCellValue(sheet, lunchCoords, "01:00")
@@ -114,7 +114,7 @@ func SetAFKCellValue(AFKDuration string) {
 	sheet := f.GetSheetName(i)
 
 	row := getRowNumber(f, sheet)
-	AFKCoords := cfg.Cfg.Report.AFKCol + row
+	AFKCoords := cfg.ColCfg.AFKCol + row
 
 	f.SetCellValue(sheet, AFKCoords, AFKDuration)
 
@@ -136,9 +136,31 @@ func SetEmployeeID() {
 	sheet := f.GetSheetName(i)
 
 	eID := cfg.Cfg.Report.EmployeeID
-	eIDCoords := cfg.Cfg.Report.EmployeeIDCoords
+	eIDCoords := cfg.ColCfg.EmployeeIDCoords
 
 	f.SetCellValue(sheet, eIDCoords, eID)
+
+	err = f.Save()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+}
+
+func SetExerciseCellValue(exerciseDuration string) {
+	f, err := openFile()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	i := f.GetActiveSheetIndex()
+	sheet := f.GetSheetName(i)
+
+	row := getRowNumber(f, sheet)
+	exerciseCoords := cfg.ColCfg.ExerciseCol + row
+
+	f.SetCellValue(sheet, exerciseCoords, exerciseDuration)
 
 	err = f.Save()
 	if err != nil {
@@ -163,7 +185,7 @@ func openFile() (*excelize.File, error) {
 }
 
 func setCateredLunch(f *excelize.File, sheet, row string, verbose bool) {
-	blLunchCoords := cfg.Cfg.Report.BLLunchCol + row
+	blLunchCoords := cfg.ColCfg.BLLunchCol + row
 	p, err := util.GetFilePath()
 	if err != nil {
 		fmt.Println(err)
@@ -177,7 +199,7 @@ func setCateredLunch(f *excelize.File, sheet, row string, verbose bool) {
 }
 
 func setOvertime(ot string, f *excelize.File, sheet, row string, verbose bool) {
-	overtimeCoords := cfg.Cfg.Report.OvertimeCol + row
+	overtimeCoords := cfg.ColCfg.OvertimeCol + row
 
 	p, err := util.GetFilePath()
 	if err != nil {

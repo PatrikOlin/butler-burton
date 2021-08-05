@@ -43,11 +43,13 @@ func Checkout(opts util.Options) error {
 
 		checkedInDurMsg := fmt.Sprintf("You checked in at: %s (%s)\n", de, dr)
 		fmt.Println(checkedInDurMsg)
-		util.SendTeamsMessage(
-			fmt.Sprintf("%s checkar ut", cfg.Cfg.Name),
-			"Utcheckad från "+string(time.Now().Format("15:04:05")),
-			cfg.Cfg.Color,
-			cfg.Cfg.WebhookURL)
+		if !opts.Silent {
+			util.SendTeamsMessage(
+				fmt.Sprintf("%s checkar ut", cfg.Cfg.Name),
+				"Utcheckad från "+string(time.Now().Format("15:04:05")),
+				cfg.Cfg.Color,
+				cfg.Cfg.WebhookURL)
+		}
 
 		var ot string
 
@@ -61,7 +63,7 @@ func Checkout(opts util.Options) error {
 			xlsx.SetCheckOutCellValue(roundedNow, "", opts.Catered, opts.Verbose)
 		}
 
-		if cfg.Cfg.Notifcations {
+		if cfg.Cfg.Notifications {
 			n := fmt.Sprintf("%s%s \n", checkedInMsg, checkedInDurMsg)
 			util.Notify("Checking out \n", n)
 		}

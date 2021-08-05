@@ -4,7 +4,7 @@
 > cd butler-burton <br>
 > make install
 
-or download binary and run it
+or download the binary and run it
 
 ## Configuration
 
@@ -12,7 +12,7 @@ Edit config-file in `$HOME/.config/butlerburton`
 
 Example-config:
 
-```ỳaml
+```yaml
 name: "Butler Burton"
 color: "#46D9FF"
 webhook_url: "<Teams webhook url>"
@@ -21,31 +21,32 @@ vab_msg: "Jag vabbar idag, försök hålla skutan flytande så är jag tillbaks 
 report:
     employee_id: "0000",
     path: "/home/burton/.butlerburton/"
-    employee_id_coords: "C2"
-    update: true
-    checkin_col: "C"
-    checkout_col: "D"
-    lunch_col: "F"
-    bl_lunch_col: "I"
-    overtime_col: "R"
-    vab_col: "L"
-    afk_col: "G"
 ```
 
 ## Development
 
 ### Build docker image
+
 ```sh
 docker build -t "imageName" .
 ```
 
 ### Start docker container
+
 ```sh
 docker run -it "imageName" sh
 ```
 
 ### Get report
-```
+
+```sh
 docker ps (get containerId)
 docker cp "containerId":/root/.butlerburton/"reportName.xlsx" .
+```
+
+### Generate man page from butlerburton.md
+
+```sh
+pandoc butlerburton.md -s -t man -o butler-burton.1
+gzip butler-burton.1
 ```
