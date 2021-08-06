@@ -53,13 +53,13 @@ func Checkout(opts util.Options) error {
 
 		var ot string
 
-		if cfg.Cfg.Report.Update && opts.Overtime {
+		if cfg.Cfg.TimeSheet.Update && opts.Overtime {
 			ot = calculateOvertime(tci)
 		}
 
-		if cfg.Cfg.Report.Update && ot != "" {
+		if cfg.Cfg.TimeSheet.Update && ot != "" {
 			xlsx.SetCheckOutCellValue(roundedNow, ot, opts.Catered, opts.Verbose)
-		} else if cfg.Cfg.Report.Update {
+		} else if cfg.Cfg.TimeSheet.Update {
 			xlsx.SetCheckOutCellValue(roundedNow, "", opts.Catered, opts.Verbose)
 		}
 

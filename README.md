@@ -18,7 +18,7 @@ color: "#46D9FF"
 webhook_url: "<Teams webhook url>"
 notifications: true
 vab_msg: "Jag vabbar idag, försök hålla skutan flytande så är jag tillbaks imorgon"
-report:
+time_sheet:
     employee_id: "0000",
     path: "/home/burton/.butlerburton/"
     update: true
@@ -38,7 +38,7 @@ docker build -t "imageName" .
 docker run -it "imageName" sh
 ```
 
-### Get report
+### Get time sheet
 
 ```sh
 docker ps (get containerId)

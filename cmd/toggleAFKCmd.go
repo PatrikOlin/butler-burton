@@ -67,7 +67,7 @@ func removeAFK(reason string, opts util.Options) {
 		fmt.Println(err)
 	} else {
 		t2 := time.Now().Unix()
-		t3 := calculateDuration(t1, t2)
+		t3 := calculateDurationLunchException(t1, t2)
 
 		d := (15 * time.Minute)
 		dur := t3.Round(d)
@@ -95,7 +95,7 @@ func removeAFK(reason string, opts util.Options) {
 			util.Notify("Checkar in igen \n", time.Now().Format("15:04:05"))
 		}
 
-		if cfg.Cfg.Report.Update {
+		if cfg.Cfg.TimeSheet.Update {
 			xlsx.SetAFKCellValue(fmtDuration(dur))
 		}
 	}

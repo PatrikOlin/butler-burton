@@ -86,7 +86,7 @@ func removeIsExercising(opts util.Options) {
 			util.Notify("Checkar in igen \n", time.Now().Format("15:04:05"))
 		}
 
-		if cfg.Cfg.Report.Update {
+		if cfg.Cfg.TimeSheet.Update {
 			xlsx.SetExerciseCellValue(fmtDuration(dur))
 		}
 	}

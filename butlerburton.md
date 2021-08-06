@@ -38,10 +38,10 @@ command line parameters will display its version and help section.
 **butler-burton co | butler-burton check-out**
 : Standard check-out procedure. Will send a Teams message saying you are check out and write your check-out time to the time sheet.
 
-**butler-burton r d && butler-burton ci && butler-burton r u**
+**butler-burton ts d && butler-burton ci && butler-burton ts u**
 : Downloads your time sheet from Sharepoint, checks you in and updates the time sheet with check-in time before uploading the time sheet to Sharepoint again.
 
-**butler-burton r d && butler-burton co -c -o && butler-burton r u**
+**butler-burton ts d && butler-burton co -c -o && butler-burton ts u**
 : Downloads your time sheet from Sharepoint, checks you out and updates the time sheet with your check-out time, catered lunch and writes extra hours to the overtime column and then uploads your time sheet to Sharepoint.
 
 # BUGS

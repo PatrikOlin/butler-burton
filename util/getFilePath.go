@@ -18,6 +18,6 @@ func GetFilePath() (string, error) {
 		log.Fatal(err)
 		return "", err
 	} else {
-		return path.Join(cfg.Cfg.Report.Path, rn), nil
+		return path.Join(cfg.Cfg.TimeSheet.Path, rn), nil
 	}
 }
