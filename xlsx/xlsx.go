@@ -11,14 +11,12 @@ import (
 )
 
 func SetCheckInCellValue(ciTime time.Time, verbose bool) {
-	f, err := openFile()
+	f, sheet, err := openTimeSheet()
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 
-	i := f.GetActiveSheetIndex()
-	sheet := f.GetSheetName(i)
 	cellCoords := cfg.ColCfg.CheckinCol + getRowNumber(f, sheet)
 
 	p, err := util.GetFilePath()
@@ -41,17 +39,14 @@ func SetCheckInCellValue(ciTime time.Time, verbose bool) {
 }
 
 func SetVabCheckin() {
-	f, err := openFile()
+	f, sheet, err := openTimeSheet()
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
-	i := f.GetActiveSheetIndex()
-	sheet := f.GetSheetName(i)
 
 	row := getRowNumber(f, sheet)
 	vabCoords := cfg.ColCfg.VabCol + row
-
 	f.SetCellValue(sheet, vabCoords, "08:00")
 
 	err = f.Save()
@@ -62,14 +57,11 @@ func SetVabCheckin() {
 }
 
 func SetCheckOutCellValue(coTime time.Time, ot string, catering, verbose bool) {
-	f, err := openFile()
+	f, sheet, err := openTimeSheet()
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
-
-	i := f.GetActiveSheetIndex()
-	sheet := f.GetSheetName(i)
 
 	row := getRowNumber(f, sheet)
 	cellCoords := cfg.ColCfg.CheckoutCol + row
@@ -77,6 +69,7 @@ func SetCheckOutCellValue(coTime time.Time, ot string, catering, verbose bool) {
 
 	f.SetCellValue(sheet, cellCoords, coTime.Format("15:04"))
 	f.SetCellValue(sheet, lunchCoords, "01:00")
+
 	p, err := util.GetFilePath()
 	if err != nil {
 		fmt.Println(err)
@@ -104,18 +97,14 @@ func SetCheckOutCellValue(coTime time.Time, ot string, catering, verbose bool) {
 }
 
 func SetAFKCellValue(AFKDuration string) {
-	f, err := openFile()
+	f, sheet, err := openTimeSheet()
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 
-	i := f.GetActiveSheetIndex()
-	sheet := f.GetSheetName(i)
-
 	row := getRowNumber(f, sheet)
 	AFKCoords := cfg.ColCfg.AFKCol + row
-
 	f.SetCellValue(sheet, AFKCoords, AFKDuration)
 
 	err = f.Save()
@@ -126,18 +115,14 @@ func SetAFKCellValue(AFKDuration string) {
 }
 
 func SetEmployeeID() {
-	f, err := openFile()
+	f, sheet, err := openTimeSheet()
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 
-	i := f.GetActiveSheetIndex()
-	sheet := f.GetSheetName(i)
-
 	eID := cfg.Cfg.TimeSheet.EmployeeID
 	eIDCoords := cfg.ColCfg.EmployeeIDCoords
-
 	f.SetCellValue(sheet, eIDCoords, eID)
 
 	err = f.Save()
@@ -148,18 +133,14 @@ func SetEmployeeID() {
 }
 
 func SetExerciseCellValue(exerciseDuration string) {
-	f, err := openFile()
+	f, sheet, err := openTimeSheet()
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 
-	i := f.GetActiveSheetIndex()
-	sheet := f.GetSheetName(i)
-
 	row := getRowNumber(f, sheet)
 	exerciseCoords := cfg.ColCfg.ExerciseCol + row
-
 	f.SetCellValue(sheet, exerciseCoords, exerciseDuration)
 
 	err = f.Save()
@@ -191,6 +172,7 @@ func setCateredLunch(f *excelize.File, sheet, row string, verbose bool) {
 		fmt.Println(err)
 		return
 	}
+
 	f.SetCellFormula(sheet, blLunchCoords, "")
 	f.SetCellValue(sheet, blLunchCoords, 1)
 	if verbose == true {
@@ -200,12 +182,12 @@ func setCateredLunch(f *excelize.File, sheet, row string, verbose bool) {
 
 func setOvertime(ot string, f *excelize.File, sheet, row string, verbose bool) {
 	overtimeCoords := cfg.ColCfg.OvertimeCol + row
-
 	p, err := util.GetFilePath()
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
+
 	err = f.SetCellValue(sheet, overtimeCoords, ot)
 	if err != nil {
 		fmt.Println(err)
@@ -237,4 +219,17 @@ func getRowNumber(f *excelize.File, sheet string) string {
 	}
 
 	return rowNum
+}
+
+func openTimeSheet() (*excelize.File, string, error) {
+	file, err := openFile()
+	if err != nil {
+		fmt.Println(err)
+		return nil, "", err
+	}
+
+	index := file.GetActiveSheetIndex()
+	sheet := file.GetSheetName(index)
+
+	return file, sheet, nil
 }

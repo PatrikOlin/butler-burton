@@ -33,6 +33,11 @@ manpage:
 	pandoc butlerburton.md -s -t man -o butler-burton.1
 	gzip butler-burton.1
 
+## build and interact with docker dev environment
+dev:
+	docker build -t "bb" .
+	docker run -it "bb" sh
+
 .PHONY: help
 all: help
 help: Makefile
