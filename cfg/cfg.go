@@ -52,13 +52,17 @@ func InitConfig() {
 
 	err := cleanenv.ReadConfig(fpath, &Cfg)
 	if err != nil {
+		fmt.Println("failed to read config file, creating config with default values")
 		createDefaultConfig(fpath)
 	}
 }
 
 func GetConfigPath() string {
 	dir := os.Getenv("HOME") + "/.config/butlerburton/"
-	makeDirectoryIfNotExists(dir)
+	err := makeDirectoryIfNotExists(dir)
+	if err != nil {
+		fmt.Println(err)
+	}
 
 	fpath := path.Join(dir, "config.yml")
 
@@ -75,7 +79,6 @@ func ReloadConfig() {
 }
 
 func createDefaultConfig(path string) {
-	fmt.Println("failed to read config file, creating config with default values")
 	Cfg = Config{
 		Name:          os.Getenv("USER"),
 		Color:         "#46D9FF",
@@ -97,6 +100,7 @@ func createDefaultConfig(path string) {
 	e := ioutil.WriteFile(path, bytes, 0644)
 	if e != nil {
 		fmt.Println("failed to create default config file")
+		fmt.Println(e)
 		panic(e)
 	}
 }
@@ -122,7 +126,7 @@ func createColumnConfig() ColumnConfig {
 
 func makeDirectoryIfNotExists(path string) error {
 	if _, err := os.Stat(path); os.IsNotExist(err) {
-		return os.Mkdir(path, os.ModeDir|0755)
+		return os.MkdirAll(path, os.ModeDir|0755)
 	}
 	return nil
 }

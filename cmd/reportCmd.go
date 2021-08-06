@@ -10,7 +10,7 @@ import (
 
 func SetReportFilename(name string) error {
 	db.Store.Put("reportFilename", name)
-	fmt.Printf("Gotcha, set %s as report name\n", name)
+	fmt.Printf("Time sheet filename set to \n", name)
 	return nil
 }
 
@@ -23,7 +23,7 @@ func GetReportFilename() error {
 		log.Fatal(err)
 		return err
 	} else {
-		fmt.Printf("Current report name is %s\n", rn)
+		fmt.Printf("Current time sheet filename is %s\n", rn)
 	}
 	return nil
 }
