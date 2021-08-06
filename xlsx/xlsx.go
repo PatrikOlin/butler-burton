@@ -135,7 +135,7 @@ func SetEmployeeID() {
 	i := f.GetActiveSheetIndex()
 	sheet := f.GetSheetName(i)
 
-	eID := cfg.Cfg.Report.EmployeeID
+	eID := cfg.Cfg.TimeSheet.EmployeeID
 	eIDCoords := cfg.ColCfg.EmployeeIDCoords
 
 	f.SetCellValue(sheet, eIDCoords, eID)
@@ -238,16 +238,3 @@ func getRowNumber(f *excelize.File, sheet string) string {
 
 	return rowNum
 }
-
-// func getPath() (string, error) {
-// 	var rn string
-// 	if err := db.Store.Get("reportFilename", &rn); err == skvs.ErrNotFound {
-// 		log.Fatal("not found")
-// 		return "", err
-// 	} else if err != nil {
-// 		log.Fatal(err)
-// 		return "", err
-// 	} else {
-// 		return path.Join(cfg.Cfg.Report.Path, rn), nil
-// 	}
-// }

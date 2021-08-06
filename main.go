@@ -86,7 +86,7 @@ func main() {
 						Name:        "catered",
 						Aliases:     []string{"c"},
 						Value:       false,
-						Usage:       "check BL-lunch field in report for todays shift",
+						Usage:       "check BL-lunch field in time sheet for todays shift",
 						Destination: &opts.Catered,
 					},
 					&cli.BoolFlag{

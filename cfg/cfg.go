@@ -12,15 +12,15 @@ import (
 )
 
 type Config struct {
-	Name          string `yaml:"name"`
-	Color         string `yaml:"color"`
-	WebhookURL    string `yaml:"webhook_url"`
-	Notifications bool   `yaml:"notifications"`
-	VabMsg        string `yaml:"vab_msg"`
-	Report        Report `yaml:"report"`
+	Name          string    `yaml:"name"`
+	Color         string    `yaml:"color"`
+	WebhookURL    string    `yaml:"webhook_url"`
+	Notifications bool      `yaml:"notifications"`
+	VabMsg        string    `yaml:"vab_msg"`
+	TimeSheet     TimeSheet `yaml:"time_sheet"`
 }
 
-type Report struct {
+type TimeSheet struct {
 	EmployeeID string `yaml:"employee_id"`
 	Path       string `yaml:"path"`
 	Update     bool   `yaml:"update"`
@@ -82,7 +82,7 @@ func createDefaultConfig(path string) {
 		WebhookURL:    "",
 		Notifications: true,
 		VabMsg:        "Jag vabbar idag, försök hålla skutan flytande så är jag tillbaka imorgon",
-		Report: Report{
+		TimeSheet: TimeSheet{
 			EmployeeID: "0000",
 			Path:       os.Getenv("HOME") + "/.butlerburton/",
 			Update:     false,

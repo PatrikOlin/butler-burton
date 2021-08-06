@@ -29,7 +29,7 @@ func Checkin(opts util.Options) error {
 			cfg.Cfg.Color, cfg.Cfg.WebhookURL)
 	}
 
-	if cfg.Cfg.Report.Update {
+	if cfg.Cfg.TimeSheet.Update {
 		xlsx.SetCheckInCellValue(rounded, opts.Verbose)
 	}
 
@@ -49,7 +49,7 @@ func VabCheckin(opts util.Options) error {
 		)
 	}
 
-	if cfg.Cfg.Report.Update {
+	if cfg.Cfg.TimeSheet.Update {
 		xlsx.SetVabCheckin()
 	}
 
