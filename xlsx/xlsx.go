@@ -89,6 +89,12 @@ func SetCheckOutCellValue(coTime time.Time, ot string, catering, verbose bool) {
 		setOvertime(ot, f, sheet, row, verbose)
 	}
 
+	err = f.UpdateLinkedValue()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
 	err = f.Save()
 	if err != nil {
 		fmt.Println(err)
