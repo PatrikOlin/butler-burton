@@ -10,7 +10,7 @@ func GetMonth() string {
 
 	d := time.Now().Day()
 	if d > reportBreakPoint {
-		month = time.Now().AddDate(0, 1, 0).Local().Month().String()
+		month = (time.Now().Local().Month() + 1).String()
 	} else {
 		month = time.Now().Local().Month().String()
 	}
