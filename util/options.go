@@ -7,4 +7,5 @@ type Options struct {
 	Vab        bool
 	ShowStatus bool
 	Silent     bool
+	Loud       bool
 }

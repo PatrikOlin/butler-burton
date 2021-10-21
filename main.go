@@ -28,6 +28,7 @@ func main() {
 		Vab:        false,
 		ShowStatus: false,
 		Silent:     false,
+		Loud:       false,
 	}
 
 	app := &cli.App{
@@ -54,6 +55,13 @@ func main() {
 				Value:       false,
 				Usage:       "turn on silent mode for this command (no Teams message)",
 				Destination: &opts.Silent,
+			},
+			&cli.BoolFlag{
+				Name:        "loud",
+				Aliases:     []string{"l"},
+				Value:       false,
+				Usage:       "turn on loud mode for this command (send Teams message)",
+				Destination: &opts.Loud,
 			},
 		},
 		Commands: []*cli.Command{
