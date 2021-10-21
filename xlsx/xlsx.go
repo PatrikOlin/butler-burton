@@ -5,9 +5,9 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/360EntSecGroup-Skylar/excelize/v2"
 	"github.com/PatrikOlin/butler-burton/cfg"
 	"github.com/PatrikOlin/butler-burton/util"
+	"github.com/xuri/excelize/v2"
 )
 
 func SetCheckInCellValue(ciTime time.Time, verbose bool) {
@@ -154,6 +154,25 @@ func SetExerciseCellValue(exerciseDuration string) {
 		fmt.Println(err)
 		return
 	}
+}
+
+func GetTransferableStock() {
+	f, sheet, err := openTimeSheet()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	// v, err := f.CalcCellValue(sheet, cfg.ColCfg.OutgoingCompTimeCoords)
+	v2, err := f.CalcCellValue(sheet, "V43")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	fmt.Println("pos flex")
+	// fmt.Println(v)
+	fmt.Println(v2)
 }
 
 func openFile() (*excelize.File, error) {

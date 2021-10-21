@@ -41,6 +41,7 @@ type ColumnConfig struct {
 	TransferredCompTimeCoords     string
 	OutgoingFlexCoords            string
 	OutgoingCompTimeCoords        string
+	OutgoingATFCoords             string
 }
 
 var Cfg Config
@@ -121,6 +122,7 @@ func createColumnConfig() ColumnConfig {
 		TransferredCompTimeCoords:     "S4",
 		OutgoingFlexCoords:            "T2",
 		OutgoingCompTimeCoords:        "T4",
+		OutgoingATFCoords:             "T5",
 	}
 }
 

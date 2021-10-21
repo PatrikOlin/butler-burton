@@ -5,6 +5,7 @@ import (
 
 	"github.com/PatrikOlin/butler-burton/cfg"
 	"github.com/PatrikOlin/butler-burton/util"
+	"github.com/PatrikOlin/butler-burton/xlsx"
 )
 
 func DownloadReport() error {
@@ -19,6 +20,7 @@ func DownloadReport() error {
 	name := strings.Replace(cfg.Cfg.Name, " ", "_", -1)
 
 	util.DownloadReport(monthFolder, monthFile, department, name)
+	xlsx.GetTransferableStock()
 
 	return nil
 }

@@ -12,6 +12,8 @@ require (
 	github.com/koltyakov/gosip v0.0.0-20210603074636-4c9eaa4e31e3
 	github.com/koltyakov/gosip-sandbox v0.0.0-20210522115717-4d41257ecc09
 	github.com/urfave/cli/v2 v2.3.0
+	github.com/xuri/excelize/v2 v2.4.1 // indirect
+	golang.org/x/net v0.0.0-20210805182204-aaa1db679c0d // indirect
 	gopkg.in/yaml.v2 v2.4.0
 	olympos.io/encoding/edn v0.0.0-20201019073823-d3554ca0b0a3 // indirect
 )
