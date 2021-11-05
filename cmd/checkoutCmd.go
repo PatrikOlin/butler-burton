@@ -43,7 +43,7 @@ func Checkout(opts util.Options) error {
 
 		checkedInDurMsg := fmt.Sprintf("You checked in at: %s (%s)\n", de, dr)
 		fmt.Println(checkedInDurMsg)
-		if !opts.Silent {
+		if opts.Loud {
 			util.SendTeamsMessage(
 				fmt.Sprintf("%s checkar ut", cfg.Cfg.Name),
 				"Utcheckad från "+string(time.Now().Format("15:04:05")),

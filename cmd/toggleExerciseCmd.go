@@ -43,7 +43,7 @@ func setIsExercising(msg string, opts util.Options) {
 		message = "Drar iväg och friskvårdar lite"
 	}
 
-	if !opts.Silent {
+	if opts.Loud {
 		util.SendTeamsMessage(
 			fmt.Sprintf("%s checkar ut en stund", cfg.Cfg.Name),
 			message,
@@ -73,7 +73,7 @@ func removeIsExercising(opts util.Options) {
 		msg := fmt.Sprintf("Checked in after excercising for %s", fmtDuration(dur))
 		fmt.Println(msg)
 
-		if !opts.Silent {
+		if opts.Loud {
 			util.SendTeamsMessage(
 				fmt.Sprintf("Äntligen är %s tillbaka!", cfg.Cfg.Name),
 				"",

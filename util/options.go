@@ -6,5 +6,5 @@ type Options struct {
 	Overtime   bool
 	Vab        bool
 	ShowStatus bool
-	Silent     bool
+	Loud       bool
 }
