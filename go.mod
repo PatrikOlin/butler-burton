@@ -3,7 +3,7 @@ module github.com/PatrikOlin/butler-burton
 go 1.15
 
 require (
-	github.com/360EntSecGroup-Skylar/excelize/v2 v2.3.2
+	github.com/xuri/excelize/v2 v2.4.1
 	github.com/PatrikOlin/skvs v0.0.0-20210222194336-87376d230895
 	github.com/boltdb/bolt v1.3.1
 	github.com/gen2brain/beeep v0.0.0-20200526185328-e9c15c258e28

@@ -5,9 +5,9 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/360EntSecGroup-Skylar/excelize/v2"
 	"github.com/PatrikOlin/butler-burton/cfg"
 	"github.com/PatrikOlin/butler-burton/util"
+	"github.com/xuri/excelize/v2"
 )
 
 func SetCheckInCellValue(ciTime time.Time, verbose bool) {
@@ -89,6 +89,7 @@ func SetCheckOutCellValue(coTime time.Time, ot string, catering, verbose bool) {
 		setOvertime(ot, f, sheet, row, verbose)
 	}
 
+	f.UpdateLinkedValue()
 	err = f.Save()
 	if err != nil {
 		fmt.Println(err)

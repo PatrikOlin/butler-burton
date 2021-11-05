@@ -35,6 +35,8 @@ type ColumnConfig struct {
 	VabCol                        string
 	AFKCol                        string
 	ExerciseCol                   string
+	WorkTimeCol                   string
+	HoursSalaryCol                string
 	EmployeeIDCoords              string
 	TransferredPositiveFlexCoords string
 	TransferredNegativeFlexCoords string
@@ -115,6 +117,8 @@ func createColumnConfig() ColumnConfig {
 		VabCol:                        "L",
 		AFKCol:                        "G",
 		ExerciseCol:                   "J",
+		WorkTimeCol:                   "H",
+		HoursSalaryCol:                "X",
 		EmployeeIDCoords:              "C2",
 		TransferredPositiveFlexCoords: "S2",
 		TransferredNegativeFlexCoords: "S3",
