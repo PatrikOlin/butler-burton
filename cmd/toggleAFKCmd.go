@@ -47,7 +47,7 @@ func setAFK(reason string, opts util.Options) {
 		msg = "Checkar ut, återkommer senare idag"
 	}
 
-	if !opts.Silent {
+	if opts.Loud {
 		util.SendTeamsMessage(
 			fmt.Sprintf("%s checkar ut en stund", cfg.Cfg.Name),
 			msg,
@@ -82,7 +82,7 @@ func removeAFK(reason string, opts util.Options) {
 			msg = " "
 		}
 
-		if !opts.Silent {
+		if opts.Loud {
 			util.SendTeamsMessage(
 				fmt.Sprintf("Äntligen är %s tillbaka!", cfg.Cfg.Name),
 				msg,

@@ -22,7 +22,7 @@ func Checkin(opts util.Options) error {
 	checkinMsg := fmt.Sprintf("Ok, checked in at %s (%s)\n", de, dr)
 	fmt.Println(checkinMsg)
 
-	if !opts.Silent {
+	if opts.Loud {
 		util.SendTeamsMessage(
 			fmt.Sprintf("%s checkar in", cfg.Cfg.Name),
 			"Incheckad från "+string(de),
@@ -40,7 +40,7 @@ func Checkin(opts util.Options) error {
 }
 
 func VabCheckin(opts util.Options) error {
-	if !opts.Silent {
+	if opts.Loud {
 		util.SendTeamsMessage(
 			fmt.Sprintf("%s vabbar", cfg.Cfg.Name),
 			cfg.Cfg.VabMsg,

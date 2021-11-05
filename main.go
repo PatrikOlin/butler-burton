@@ -27,7 +27,6 @@ func main() {
 		Overtime:   false,
 		Vab:        false,
 		ShowStatus: false,
-		Silent:     false,
 		Loud:       false,
 	}
 
@@ -48,13 +47,6 @@ func main() {
 				Value:       false,
 				Usage:       "turn on verbose mode",
 				Destination: &opts.Verbose,
-			},
-			&cli.BoolFlag{
-				Name:        "silent",
-				Aliases:     []string{"s"},
-				Value:       false,
-				Usage:       "turn on silent mode for this command (no Teams message)",
-				Destination: &opts.Silent,
 			},
 			&cli.BoolFlag{
 				Name:        "loud",
