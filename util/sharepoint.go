@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"net/http"
 	"os"
 	"strings"
 	"time"
@@ -54,6 +55,22 @@ func UploadReport(monthFolder, department, filePath string) error {
 		log.Fatal(err)
 		return err
 	}
+
+	return nil
+}
+
+func GetTodaysLunchMenu() error {
+	url := "https://api.fejk.company/v1/pipple?amount=2"
+	resp, err := http.Get(url)
+	if err != nil {
+		return err
+	}
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return err
+	}
+	str := string(body)
+	log.Printf(str)
 
 	return nil
 }

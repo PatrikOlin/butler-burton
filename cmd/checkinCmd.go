@@ -36,6 +36,12 @@ func Checkin(opts util.Options) error {
 	if cfg.Cfg.Notifications {
 		util.Notify("Checking in \n", checkinMsg)
 	}
+
+	err := util.GetTodaysLunchMenu()
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 
