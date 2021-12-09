@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strconv"
 	"strings"
 	"time"
 
@@ -13,6 +14,22 @@ import (
 	strategy "github.com/koltyakov/gosip-sandbox/strategies/azurecert"
 	"github.com/koltyakov/gosip/api"
 )
+
+type LunchMenuItem []struct {
+	Metadata struct {
+		ID   string `json:"id"`
+		URI  string `json:"uri"`
+		Etag string `json:"etag"`
+		Type string `json:"type"`
+	} `json:"__metadata"`
+	Day                  string    `json:"Day"`
+	MenuX0020Item        int       `json:"Menu_x0020_Item"`
+	ItemX0020Name        string    `json:"Item_x0020_Name"`
+	ItemX0020Description string    `json:"Item_x0020_Description"`
+	Week                 string    `json:"Week"`
+	DagNr                string    `json:"DagNr"`
+	Created              time.Time `json:"Created"`
+}
 
 func DownloadBaseReport(name, monthFolder, monthFile string) string {
 	y := time.Now().Format("2006")
@@ -60,7 +77,8 @@ func UploadReport(monthFolder, department, filePath string) error {
 }
 
 func GetTodaysLunchMenu() error {
-	url := "https://api.fejk.company/v1/pipple?amount=2"
+	url := "http://bltv01.blinfo.se:4300/lunch/" + strconv.Itoa(getWeek())
+
 	resp, err := http.Get(url)
 	if err != nil {
 		return err
@@ -70,9 +88,12 @@ func GetTodaysLunchMenu() error {
 		return err
 	}
 	str := string(body)
-	log.Printf(str)
 
 	return nil
+}
+
+func filterTodaysMeals() {
+
 }
 
 func getFile(fileRelURL, fileName string) {
@@ -108,4 +129,15 @@ func auth() *api.SP {
 	sp := api.NewSP(client)
 
 	return sp
+}
+
+func getWeek() int {
+	t := time.Now().UTC()
+	_, week := t.ISOWeek()
+
+	return week
+}
+
+func getWeekDay() time.Weekday {
+	return time.Now().Weekday()
 }
