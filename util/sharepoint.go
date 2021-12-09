@@ -89,6 +89,9 @@ func GetTodaysLunchMenu() ([]AbbrMenuItem, error) {
 	var dayMenu []AbbrMenuItem
 
 	resp, err := http.Get(url)
+	if resp == nil {
+		return dayMenu, nil
+	}
 	if err != nil {
 		return dayMenu, err
 	}

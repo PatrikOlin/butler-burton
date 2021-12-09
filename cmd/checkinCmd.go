@@ -43,7 +43,7 @@ func Checkin(opts util.Options) error {
 	menu, err := util.GetTodaysLunchMenu()
 	if err != nil {
 		return err
-	} else {
+	} else if len(menu) > 0 {
 		prettyPrintMenu(menu)
 	}
 
