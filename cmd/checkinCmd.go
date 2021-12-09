@@ -2,7 +2,10 @@ package cmd
 
 import (
 	"fmt"
+	"os"
 	"time"
+
+	"github.com/jedib0t/go-pretty/table"
 
 	"github.com/PatrikOlin/butler-burton/cfg"
 	"github.com/PatrikOlin/butler-burton/db"
@@ -37,9 +40,11 @@ func Checkin(opts util.Options) error {
 		util.Notify("Checking in \n", checkinMsg)
 	}
 
-	err := util.GetTodaysLunchMenu()
+	menu, err := util.GetTodaysLunchMenu()
 	if err != nil {
 		return err
+	} else {
+		prettyPrintMenu(menu)
 	}
 
 	return nil
@@ -64,4 +69,16 @@ func VabCheckin(opts util.Options) error {
 	}
 
 	return nil
+}
+
+func prettyPrintMenu(menu []util.AbbrMenuItem) {
+	t := table.NewWriter()
+	t.SetOutputMirror(os.Stdout)
+	t.AppendHeader(table.Row{"#", "Rätt", "Kategori"})
+	for _, item := range menu {
+		t.AppendRow([]interface{}{item.Number, item.Name, item.Category})
+	}
+	t.AppendFooter(table.Row{"", "Du har väl inte glömt att beställa käk?", ""})
+
+	t.Render()
 }

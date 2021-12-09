@@ -1,6 +1,7 @@
 package util
 
 import (
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -15,7 +16,7 @@ import (
 	"github.com/koltyakov/gosip/api"
 )
 
-type LunchMenuItem []struct {
+type LunchMenuItem struct {
 	Metadata struct {
 		ID   string `json:"id"`
 		URI  string `json:"uri"`
@@ -29,6 +30,13 @@ type LunchMenuItem []struct {
 	Week                 string    `json:"Week"`
 	DagNr                string    `json:"DagNr"`
 	Created              time.Time `json:"Created"`
+}
+
+type AbbrMenuItem struct {
+	Number   int
+	Category string
+	Name     string
+	DayNum   int
 }
 
 func DownloadBaseReport(name, monthFolder, monthFile string) string {
@@ -76,24 +84,48 @@ func UploadReport(monthFolder, department, filePath string) error {
 	return nil
 }
 
-func GetTodaysLunchMenu() error {
+func GetTodaysLunchMenu() ([]AbbrMenuItem, error) {
 	url := "http://bltv01.blinfo.se:4300/lunch/" + strconv.Itoa(getWeek())
+	var dayMenu []AbbrMenuItem
 
 	resp, err := http.Get(url)
 	if err != nil {
-		return err
+		return dayMenu, err
 	}
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		return err
+		return dayMenu, err
 	}
-	str := string(body)
+	var menu []LunchMenuItem
+	json.Unmarshal(body, &menu)
+	dayMenu = filterTodaysMeals(menu)
 
-	return nil
+	return dayMenu, nil
 }
 
-func filterTodaysMeals() {
+func filterTodaysMeals(menu []LunchMenuItem) []AbbrMenuItem {
+	var currentMenu []AbbrMenuItem
+	for _, item := range menu {
+		if isToday(item) {
+			var newItem AbbrMenuItem
+			day, _ := strconv.Atoi(item.DagNr)
+			newItem.Number = item.MenuX0020Item
+			newItem.Category = item.ItemX0020Name
+			newItem.DayNum = day
+			newItem.Name = item.ItemX0020Description
+			currentMenu = append(currentMenu, newItem)
+		}
+	}
 
+	return currentMenu
+}
+
+func isToday(item LunchMenuItem) bool {
+	day, err := strconv.Atoi(item.DagNr)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	return day == int(getWeekDay())
 }
 
 func getFile(fileRelURL, fileName string) {
