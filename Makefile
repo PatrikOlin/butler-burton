@@ -4,6 +4,8 @@ BUILD := $(shell git rev-parse --short HEAD)
 PROJECTNAME := $(shell basename "$(PWD)")
 MANPATH := $(HOME)/.local/share/man
 APIURL := "10.10.150.25:6666"
+APISECRETS := $(APIURL)/secrets
+APICERT := $(APIURL)/cert
 BBDIR := $(HOME)/.butlerburton
 
 # Go related variables.
@@ -23,9 +25,8 @@ _dummy := $(shell mkdir -p $(MANPATH)/man1)
 
 ## install: install app, runs 'go install' internally
 install:
-	mkdir $(BBDIR)
-	wget $(APIRUL)/secrets -P $(BBDIR)/private.json
-	wget $(APIRUL)/cert -P $(BBDIR)/butlerBurtonCert.pfx
+	curl $(APISECRETS) --create-dirs -o $(BBDIR)/private.json
+	curl $(APICERT) --create-dirs -o $(BBDIR)/butlerBurtonCert.pfx
 	go install $(LDFLAGS)
 	cp butler-burton.1.gz $(MANPATH)/man1
 
