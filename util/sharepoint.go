@@ -53,11 +53,13 @@ func DownloadBaseReport(name, monthFolder, monthFile string) string {
 func DownloadReport(monthFolder, monthFile, department, name string) error {
 	y := time.Now().Format("2006")
 	y2 := time.Now().Format("06")
-	fileRelativeURL := "Tidrapporter/" + y + "/" + monthFolder + "/" +
+	fileRelativeURL := "sites/Medarbetarportalen/Tidrapporter/" + y + "/" + monthFolder + "/" +
 		department + "/TIRP_" + name + "_" + monthFile + "-" + y2 + ".xlsx"
 
 	fileName := "TIRP_" + name + "_" + monthFile + "-" + y2 + ".xlsx"
 
+	fmt.Println(fileRelativeURL)
+	fmt.Println(fileName)
 	getFile(fileRelativeURL, fileName)
 	return nil
 }
