@@ -1,6 +1,7 @@
 package util
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -42,7 +43,7 @@ type AbbrMenuItem struct {
 func DownloadBaseReport(name, monthFolder, monthFile string) string {
 	y := time.Now().Format("2006")
 	y2 := time.Now().Format("06")
-	fileRelativeURL := "Tidrapporter/" + y + "/" + monthFolder + "/TIRP_Original_" + monthFile + "-" + y2 + ".xlsx"
+	fileRelativeURL := "Tidrapporter/" + y + "/" + monthFolder + "/TIRP_" + "Månadslön" + "_" + monthFile + "-" + y2 + ".xlsx"
 
 	fileName := "TIRP_" + name + "_" + monthFile + "-" + y2 + ".xlsx"
 
@@ -53,13 +54,11 @@ func DownloadBaseReport(name, monthFolder, monthFile string) string {
 func DownloadReport(monthFolder, monthFile, department, name string) error {
 	y := time.Now().Format("2006")
 	y2 := time.Now().Format("06")
-	fileRelativeURL := "sites/Medarbetarportalen/Tidrapporter/" + y + "/" + monthFolder + "/" +
+	fileRelativeURL := "Tidrapporter/" + y + "/" + monthFolder + "/" +
 		department + "/TIRP_" + name + "_" + monthFile + "-" + y2 + ".xlsx"
 
 	fileName := "TIRP_" + name + "_" + monthFile + "-" + y2 + ".xlsx"
 
-	fmt.Println(fileRelativeURL)
-	fmt.Println(fileName)
 	getFile(fileRelativeURL, fileName)
 	return nil
 }
@@ -135,7 +134,9 @@ func isToday(item LunchMenuItem) bool {
 
 func getFile(fileRelURL, fileName string) {
 	sp := auth()
-	data, err := sp.Web().GetFile(fileRelURL).Download()
+
+	data, err := sp.Web().GetFileByPath(fileRelURL).Download()
+
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -162,8 +163,11 @@ func auth() *api.SP {
 		log.Fatalf("unable to get config: %v", err)
 	}
 
+	conf := &api.RequestConfig{
+		Context: context.Background(),
+	}
 	client := &gosip.SPClient{AuthCnfg: authCnfg}
-	sp := api.NewSP(client)
+	sp := api.NewSP(client).Conf(conf)
 
 	return sp
 }
