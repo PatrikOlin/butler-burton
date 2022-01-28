@@ -6,18 +6,18 @@ import (
 
 func GetMonthFolderReplacer() *strings.Replacer {
 	r := strings.NewReplacer(
-		"January", "01. januari",
-		"February", "02. februari",
-		"March", "03. mars",
-		"April", "04. april",
-		"May", "05. maj",
-		"June", "06. juni",
-		"July", "07. juli",
-		"August", "08. augusti",
-		"September", "09. september",
-		"October", "10. oktober",
-		"November", "11. november",
-		"December", "12. december",
+		"January", "01. Januari",
+		"February", "02. Februari",
+		"March", "03. Mars",
+		"April", "04. April",
+		"May", "05. Maj",
+		"June", "06. Juni",
+		"July", "07. Juli",
+		"August", "08. Augusti",
+		"September", "09. September",
+		"October", "10. Oktober",
+		"November", "11. November",
+		"December", "12. December",
 	)
 	return r
 }
