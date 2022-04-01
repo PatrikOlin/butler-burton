@@ -27,7 +27,7 @@ func GetMonthFileReplacer() *strings.Replacer {
 		"January", "Jan",
 		"February", "Feb",
 		"March", "Mars",
-		"April", "April",
+		"April", "Apr",
 		"May", "Maj",
 		"June", "Juni",
 		"July", "Juli",
