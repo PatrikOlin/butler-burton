@@ -30,6 +30,11 @@ install:
 	go install $(LDFLAGS)
 	cp butler-burton.1.gz $(MANPATH)/man1
 
+## update: updates the installed app to a new version. Basically the same as install without downloading the cert-files
+update:
+	go install $(LDFLAGS)
+	cp butler-burton.1.gz $(MANPATH)/man1
+
 ## build: build binary, runs 'go build' internally
 build:
 	go build $(LDFLAGS) -o $(PROJECTNAME)
