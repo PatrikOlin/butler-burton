@@ -26,6 +26,7 @@ func main() {
 		Catered:    false,
 		Overtime:   false,
 		Vab:        false,
+		Weekend:    false,
 		ShowStatus: false,
 		Loud:       false,
 	}
@@ -96,8 +97,18 @@ func main() {
 						Usage:       "write overtime to overtime column",
 						Destination: &opts.Overtime,
 					},
+					&cli.BoolFlag{
+						Name:        "weekend",
+						Aliases:     []string{"w"},
+						Value:       false,
+						Usage:       "check out with weekend message",
+						Destination: &opts.Weekend,
+					},
 				},
 				Action: func(c *cli.Context) error {
+					if opts.Weekend {
+						return cmd.WeekendCheckout(opts)
+					}
 					return cmd.Checkout(opts)
 				},
 			},

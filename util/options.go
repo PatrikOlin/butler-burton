@@ -7,4 +7,5 @@ type Options struct {
 	Vab        bool
 	ShowStatus bool
 	Loud       bool
+	Weekend    bool
 }
