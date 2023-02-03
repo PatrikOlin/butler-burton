@@ -18,6 +18,7 @@ type Config struct {
 	Notifications bool      `yaml:"notifications"`
 	VabMsg        string    `yaml:"vab_msg"`
 	TimeSheet     TimeSheet `yaml:"time_sheet"`
+	WeekEndMsg    string    `yaml:"weekend_msg"`
 }
 
 type TimeSheet struct {
@@ -87,6 +88,7 @@ func createDefaultConfig(path string) {
 		WebhookURL:    "",
 		Notifications: true,
 		VabMsg:        "Jag vabbar idag, försök hålla skutan flytande så är jag tillbaka imorgon",
+		WeekEndMsg:    "Trevlig helg!",
 		TimeSheet: TimeSheet{
 			EmployeeID: "0000",
 			Path:       os.Getenv("HOME") + "/.butlerburton/",

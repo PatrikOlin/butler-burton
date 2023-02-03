@@ -103,3 +103,15 @@ func calculateOvertime(tci time.Duration) string {
 
 	return ""
 }
+
+func WeekendCheckout(opts util.Options) error {
+	if opts.Loud {
+		util.SendTeamsMessage(
+			fmt.Sprintf("%s checkar ut", cfg.Cfg.Name),
+			cfg.Cfg.WeekEndMsg,
+			cfg.Cfg.Color,
+			cfg.Cfg.WebhookURL,
+		)
+	}
+	return nil
+}

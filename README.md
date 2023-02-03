@@ -18,6 +18,7 @@ color: "#46D9FF"
 webhook_url: "<Teams webhook url>"
 notifications: true
 vab_msg: "Jag vabbar idag, försök hålla skutan flytande så är jag tillbaks imorgon"
+weekend_msg: "Trevlig helg!"
 time_sheet:
     employee_id: "0000",
     path: "/home/burton/.butlerburton/"
