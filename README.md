@@ -43,7 +43,7 @@ First of you should set your name and password for Ubuntu. But we are not done y
 sudo apt update && sudo apt install golang-go make 
 ```
 
-After this step make sure on BL-VPN or on any of the offices 
+After this step make sure you are on BL-VPN or in any of the offices 
 
 ### Installation 
 
